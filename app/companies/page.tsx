@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Company = {
@@ -42,7 +41,6 @@ function toggleValue(
 
 export default function CompaniesPage() {
   const supabase = createClient();
-  const searchParams = useSearchParams();
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,18 +53,20 @@ export default function CompaniesPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   useEffect(() => {
-    const q = searchParams.get("q") || "";
-    const country = searchParams.get("country") || "all";
-    const service = searchParams.get("service") || "";
-    const transport = searchParams.get("transport") || "";
-    const vehicle = searchParams.get("vehicle") || "";
+    const params = new URLSearchParams(window.location.search);
+
+    const q = params.get("q") || "";
+    const country = params.get("country") || "all";
+    const service = params.get("service") || "";
+    const transport = params.get("transport") || "";
+    const vehicle = params.get("vehicle") || "";
 
     setSearch(q);
     setCountryFilter(country);
     setServiceFilters(service ? [service] : []);
     setTransportFilters(transport ? [transport] : []);
     setVehicleFilters(vehicle ? [vehicle] : []);
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     const loadCompanies = async () => {
@@ -90,7 +90,7 @@ export default function CompaniesPage() {
     };
 
     loadCompanies();
-  }, []);
+  }, [supabase]);
 
   const availableCountries = useMemo(
     () =>
