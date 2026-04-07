@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -18,7 +20,9 @@ type Company = {
 };
 
 function uniqueSorted(values: string[]) {
-  return [...new Set(values)].sort((a, b) => a.localeCompare(b));
+  return [...new Set(values.filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b)
+  );
 }
 
 function normalizeWebsite(url: string | null) {
