@@ -38,12 +38,20 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+const { data, error } = await supabase.auth.signUp({
+  email,
+  password,
+});
 
     setLoading(false);
+
+   if (!error && data?.user) {
+  await supabase.from("users").upsert({
+    id: data.user.id,
+    email: data.user.email,
+    role: "user",
+  });
+} 
 
     if (error) {
       if (error.message.toLowerCase().includes("rate limit")) {
