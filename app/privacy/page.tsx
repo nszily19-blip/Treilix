@@ -171,7 +171,7 @@ export default function PrivacyPage() {
             <p>
               <strong>Treilix</strong>
             </p>
-            <p>Email: your@email.com</p>
+            <p>Email: info@treilix.com</p>
           </div>
         </section>
 

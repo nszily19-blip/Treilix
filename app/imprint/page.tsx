@@ -19,7 +19,7 @@ export default function ImprintPage() {
             <p><strong>Treilix</strong></p>
             <p>Szilard Nagy</p>
             <p>Munich, Germany</p>
-            <p>Email: your@email.com</p>
+            <p>Email: info@treilix.com</p>
           </div>
         </section>
 
@@ -38,7 +38,7 @@ export default function ImprintPage() {
             Contact
           </h2>
           <div className="mt-3 space-y-1 text-sm leading-7 text-slate-700">
-            <p>Email: your@email.com</p>
+            <p>Email: info@treilix.com</p>
           </div>
         </section>
 

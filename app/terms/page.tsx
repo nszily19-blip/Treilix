@@ -121,7 +121,7 @@ export default function TermsPage() {
             <p className="mt-2">
               <strong>Treilix</strong>
             </p>
-            <p>Email: your@email.com</p>
+            <p>Email: info@treilix.com</p>
           </div>
         </section>
 
