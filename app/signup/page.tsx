@@ -45,14 +45,6 @@ const { data, error } = await supabase.auth.signUp({
 
     setLoading(false);
 
-   if (!error && data?.user) {
-  await supabase.from("users").upsert({
-    id: data.user.id,
-    email: data.user.email,
-    role: "user",
-  });
-} 
-
     if (error) {
       if (error.message.toLowerCase().includes("rate limit")) {
         setMessage("Too many attempts. Please wait a little and try again.");
