@@ -41,16 +41,12 @@ const VEHICLE_TYPES = [
   "Flatbed",
 ];
 
-function toggleValue(
-  value: string,
-  list: string[],
-  setList: React.Dispatch<React.SetStateAction<string[]>>
-) {
-  if (list.includes(value)) {
-    setList(list.filter((item) => item !== value));
-  } else {
-    setList([...list, value]);
-  }
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 export default function AddCompanyPage() {
@@ -66,6 +62,7 @@ export default function AddCompanyPage() {
   const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
   const [description, setDescription] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -77,6 +74,60 @@ export default function AddCompanyPage() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
+    if (!user) {
+      setMessage("Please log in first.");
+      setLoading(false);
+      return;
+    }
+
+    if (!companyName.trim()) {
+      setMessage("Company name is required.");
+      setLoading(false);
+      return;
+    }
+
+    let logoUrl: string | null = null;
+
+    if (logoFile) {
+      const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+      const maxSize = 2 * 1024 * 1024; // 2 MB
+
+      if (!allowedTypes.includes(logoFile.type)) {
+        setMessage("Logo must be a PNG, JPG, JPEG or WEBP image.");
+        setLoading(false);
+        return;
+      }
+
+      if (logoFile.size > maxSize) {
+        setMessage("Logo must be smaller than 2 MB.");
+        setLoading(false);
+        return;
+      }
+
+      const fileExt = logoFile.name.split(".").pop()?.toLowerCase() || "png";
+      const safeCompanyName = slugify(companyName || "company");
+      const fileName = `${user.id}/${safeCompanyName}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("company-logos")
+        .upload(fileName, logoFile, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) {
+        setMessage("Logo upload error: " + uploadError.message);
+        setLoading(false);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("company-logos")
+        .getPublicUrl(fileName);
+
+      logoUrl = publicUrlData.publicUrl;
+    }
 
     const { error } = await supabase.from("company_submissions").insert([
       {
@@ -90,7 +141,8 @@ export default function AddCompanyPage() {
         phone: phone.trim(),
         website: website.trim(),
         description: description.trim(),
-        user_id: user?.id,
+        logo_url: logoUrl,
+        user_id: user.id,
         status: "pending",
       },
     ]);
@@ -113,6 +165,7 @@ export default function AddCompanyPage() {
     setPhone("");
     setWebsite("");
     setDescription("");
+    setLogoFile(null);
   };
 
   return (
@@ -142,6 +195,21 @@ export default function AddCompanyPage() {
               />
             </div>
 
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-800">
+                Company logo
+              </label>
+              <input
+                type="file"
+                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+              />
+              <p className="mt-2 text-xs text-slate-500">
+                Allowed: PNG, JPG, JPEG, WEBP. Max 2 MB.
+              </p>
+            </div>
+
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-800">
@@ -169,30 +237,30 @@ export default function AddCompanyPage() {
             </div>
 
             <div>
-             <MultiSelect
-             label="Service countries"
-             options={SERVICE_COUNTRIES}
-             selected={serviceCountries}
-             setSelected={setServiceCountries}
-            />
+              <MultiSelect
+                label="Service countries"
+                options={SERVICE_COUNTRIES}
+                selected={serviceCountries}
+                setSelected={setServiceCountries}
+              />
             </div>
 
             <div>
               <MultiSelect
-  label="Transport types"
-  options={TRANSPORT_TYPES}
-  selected={transportTypes}
-  setSelected={setTransportTypes}
-/>
+                label="Transport types"
+                options={TRANSPORT_TYPES}
+                selected={transportTypes}
+                setSelected={setTransportTypes}
+              />
             </div>
 
             <div>
               <MultiSelect
-  label="Vehicle types"
-  options={VEHICLE_TYPES}
-  selected={vehicleTypes}
-  setSelected={setVehicleTypes}
-/>
+                label="Vehicle types"
+                options={VEHICLE_TYPES}
+                selected={vehicleTypes}
+                setSelected={setVehicleTypes}
+              />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">

@@ -1,14 +1,14 @@
 export default function ImprintPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
-      <div className="mx-auto max-w-4xl rounded-3xl border bg-white p-6 shadow-sm md:p-10">
+      <div className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
         <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
           Imprint
         </h1>
 
         <p className="mt-4 text-sm leading-7 text-slate-600">
           Information provided in accordance with applicable legal disclosure
-          requirements, including Section 5 TMG where applicable.
+          requirements, including Section 5 DDG where applicable.
         </p>
 
         <section className="mt-8">
@@ -18,7 +18,9 @@ export default function ImprintPage() {
           <div className="mt-3 space-y-1 text-sm leading-7 text-slate-700">
             <p><strong>Treilix</strong></p>
             <p>Szilard Nagy</p>
-            <p>Munich, Germany</p>
+            <p>Putzbrunner Straße 20</p>
+            <p>81737 München</p>
+            <p>Germany</p>
             <p>Email: info@treilix.com</p>
           </div>
         </section>
@@ -73,7 +75,8 @@ export default function ImprintPage() {
             The content and works published on this website are subject to
             applicable copyright laws. Any reproduction, editing, distribution,
             or use outside the limits of copyright law requires prior written
-            consent from the respective author or creator, unless otherwise permitted by law.
+            consent from the respective author or creator, unless otherwise
+            permitted by law.
           </p>
         </section>
 

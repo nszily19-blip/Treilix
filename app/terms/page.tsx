@@ -1,7 +1,7 @@
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
-      <div className="mx-auto max-w-4xl rounded-3xl border bg-white p-6 shadow-sm md:p-10">
+      <div className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
         <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
           Terms & Conditions
         </h1>
@@ -11,7 +11,6 @@ export default function TermsPage() {
           By accessing or using the platform, you agree to these terms.
         </p>
 
-        {/* 1 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             1. Platform purpose
@@ -23,7 +22,6 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 2 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             2. User accounts
@@ -35,7 +33,6 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 3 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             3. User responsibilities
@@ -51,7 +48,6 @@ export default function TermsPage() {
           </div>
         </section>
 
-        {/* 4 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             4. Company listings
@@ -63,7 +59,6 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 5 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             5. Claims and ownership
@@ -74,31 +69,28 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 6 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             6. Inquiries and communication
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-700">
-            Treilix enables communication between users and companies.
-            We do not guarantee responses, business agreements, or outcomes
-            resulting from inquiries.
+            Treilix enables communication between users and companies. We do not
+            guarantee responses, business agreements, or outcomes resulting from
+            inquiries.
           </p>
         </section>
 
-        {/* 7 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             7. Limitation of liability
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-700">
-            The platform is provided "as is". Treilix is not liable for any
+            The platform is provided &quot;as is&quot;. Treilix is not liable for any
             direct or indirect damages arising from the use of the platform,
             except where required by law.
           </p>
         </section>
 
-        {/* 8 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             8. Changes to the terms
@@ -109,18 +101,16 @@ export default function TermsPage() {
           </p>
         </section>
 
-        {/* 9 */}
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
             9. Contact
           </h2>
-          <div className="mt-3 text-sm leading-7 text-slate-700">
-            <p>
-              For questions regarding these Terms & Conditions, contact:
-            </p>
-            <p className="mt-2">
-              <strong>Treilix</strong>
-            </p>
+          <div className="mt-3 space-y-1 text-sm leading-7 text-slate-700">
+            <p><strong>Treilix</strong></p>
+            <p>Szilard Nagy</p>
+            <p>Putzbrunner Straße 20</p>
+            <p>81737 München</p>
+            <p>Germany</p>
             <p>Email: info@treilix.com</p>
           </div>
         </section>

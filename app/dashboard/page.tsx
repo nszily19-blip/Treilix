@@ -19,6 +19,7 @@ type Claim = {
 
 type Submission = {
   id: string;
+  logo_url: string | null;
   company_name: string | null;
   country: string | null;
   city: string | null;
@@ -42,6 +43,7 @@ type Company = {
   website?: string | null;
   owner_id?: string | null;
   created_at?: string | null;
+  logo_url?: string | null;
 };
 
 type Inquiry = {
@@ -59,6 +61,7 @@ type Inquiry = {
 
 type InquiryWithCompany = Inquiry & {
   company_name?: string | null;
+  company_logo_url?: string | null;
 };
 
 type UserInfo = {
@@ -74,6 +77,93 @@ function formatDate(value?: string | null) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Unknown date";
   return date.toLocaleString();
+}
+
+function getInitials(name?: string | null) {
+  if (!name) return "C";
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function normalizeWebsite(url?: string | null) {
+  if (!url) return null;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://${url}`;
+}
+
+function CompanyLogo({
+  logoUrl,
+  companyName,
+  size = "md",
+}: {
+  logoUrl?: string | null;
+  companyName?: string | null;
+  size?: "sm" | "md";
+}) {
+  const classes =
+    size === "sm"
+      ? "h-12 w-12 rounded-xl"
+      : "h-14 w-14 rounded-2xl";
+
+  if (logoUrl) {
+    return (
+      <img
+        src={logoUrl}
+        alt={companyName || "Company logo"}
+        className={`${classes} border border-slate-200 bg-white object-cover`}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`${classes} flex items-center justify-center border border-slate-200 bg-slate-100 text-sm font-semibold text-slate-500`}
+    >
+      {getInitials(companyName)}
+    </div>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  subtext,
+}: {
+  label: string;
+  value: number;
+  subtext?: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-sm font-medium text-slate-500">{label}</p>
+      <p className="mt-2 text-3xl font-bold text-slate-900">{value}</p>
+      {subtext && <p className="mt-2 text-sm text-slate-500">{subtext}</p>}
+    </div>
+  );
+}
+
+function SectionCard({
+  title,
+  description,
+  right,
+  children,
+}: {
+  title: string;
+  description?: string;
+  right?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 md:text-2xl">{title}</h2>
+          {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+        </div>
+        {right}
+      </div>
+      {children}
+    </section>
+  );
 }
 
 export default function DashboardPage() {
@@ -151,7 +241,7 @@ export default function DashboardPage() {
 
       const allCompaniesQuery = supabase
         .from("companies")
-        .select("id, company_name, city, country, owner_id, created_at")
+        .select("id, company_name, city, country, owner_id, created_at, logo_url")
         .order("created_at", { ascending: false });
 
       if (!isAdmin) {
@@ -200,6 +290,7 @@ export default function DashboardPage() {
       ...inquiry,
       company_name:
         companyMap.get(inquiry.company_id)?.company_name || "Unknown company",
+      company_logo_url: companyMap.get(inquiry.company_id)?.logo_url || null,
     }));
   }, [inquiries, companyMap]);
 
@@ -279,6 +370,7 @@ export default function DashboardPage() {
             phone: submission.phone,
             website: submission.website,
             description: submission.description,
+            logo_url: submission.logo_url,
             owner_id: submission.user_id,
           },
         ])
@@ -354,9 +446,7 @@ export default function DashboardPage() {
     }
 
     setMyCompanies((prev) => prev.filter((company) => company.id !== companyId));
-    setAllCompanies((prev) =>
-      prev.filter((company) => company.id !== companyId)
-    );
+    setAllCompanies((prev) => prev.filter((company) => company.id !== companyId));
     setActionLoading(null);
   };
 
@@ -421,95 +511,79 @@ export default function DashboardPage() {
   const approvedClaims = claims.filter((c) => c.status === "approved").length;
   const rejectedClaims = claims.filter((c) => c.status === "rejected").length;
 
-  const pendingSubmissions = submissions.filter(
-    (s) => s.status === "pending"
-  ).length;
-  const approvedSubmissions = submissions.filter(
-    (s) => s.status === "approved"
-  ).length;
-  const rejectedSubmissions = submissions.filter(
-    (s) => s.status === "rejected"
-  ).length;
+  const pendingSubmissions = submissions.filter((s) => s.status === "pending").length;
+  const approvedSubmissions = submissions.filter((s) => s.status === "approved").length;
+  const rejectedSubmissions = submissions.filter((s) => s.status === "rejected").length;
 
   const newInquiries = inquiries.filter((i) => i.status === "new").length;
   const readInquiries = inquiries.filter((i) => i.status === "read").length;
   const closedInquiries = inquiries.filter((i) => i.status === "closed").length;
 
   return (
-    <main className="min-h-screen bg-slate-50 p-4 md:p-6">
-      <div className="mx-auto max-w-7xl space-y-8">
+    <main className="min-h-screen bg-slate-50 px-4 py-6 md:px-6 md:py-8">
+      <div className="mx-auto max-w-7xl space-y-6 md:space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
+            Dashboard
+          </h1>
           <p className="mt-2 text-sm text-slate-600">
-            {isAdmin ? "Admin overview" : "Your company activity overview"}
+            {isAdmin ? "Admin overview" : "Manage your companies and inquiries"}
           </p>
         </div>
 
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
+            Loading...
+          </div>
+        )}
 
         {!loading && (
           <>
             {isAdmin ? (
               <>
-                <section className="grid gap-4 md:grid-cols-4">
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">My companies</p>
-                    <p className="mt-2 text-3xl font-bold">{myCompanies.length}</p>
-                  </div>
-
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">Claims</p>
-                    <p className="mt-2 text-3xl font-bold">{claims.length}</p>
-                    <p className="mt-2 text-sm text-slate-500">
-                      Pending: {pendingClaims} · Approved: {approvedClaims} ·
-                      Rejected: {rejectedClaims}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">Submissions</p>
-                    <p className="mt-2 text-3xl font-bold">
-                      {submissions.length}
-                    </p>
-                    <p className="mt-2 text-sm text-slate-500">
-                      Pending: {pendingSubmissions} · Approved:{" "}
-                      {approvedSubmissions} · Rejected: {rejectedSubmissions}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">Inquiries</p>
-                    <p className="mt-2 text-3xl font-bold">{inquiries.length}</p>
-                    <p className="mt-2 text-sm text-slate-500">
-                      New: {newInquiries} · Read: {readInquiries} · Closed:{" "}
-                      {closedInquiries}
-                    </p>
-                  </div>
+                <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <StatCard label="My companies" value={myCompanies.length} />
+                  <StatCard
+                    label="Claims"
+                    value={claims.length}
+                    subtext={`Pending: ${pendingClaims} · Approved: ${approvedClaims} · Rejected: ${rejectedClaims}`}
+                  />
+                  <StatCard
+                    label="Submissions"
+                    value={submissions.length}
+                    subtext={`Pending: ${pendingSubmissions} · Approved: ${approvedSubmissions} · Rejected: ${rejectedSubmissions}`}
+                  />
+                  <StatCard
+                    label="Inquiries"
+                    value={inquiries.length}
+                    subtext={`New: ${newInquiries} · Read: ${readInquiries} · Closed: ${closedInquiries}`}
+                  />
                 </section>
 
-                <section className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <h2 className="text-2xl font-semibold">My Companies</h2>
+                <SectionCard
+                  title="My Companies"
+                  description="Your owned companies on Treilix."
+                  right={
                     <Link
                       href="/add-company"
-                      className="rounded-xl bg-blue-600 px-4 py-2 text-center text-white"
+                      className="rounded-2xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
                     >
                       Add company
                     </Link>
-                  </div>
-
+                  }
+                >
                   <div className="mb-5">
                     <input
                       type="text"
                       placeholder="Search company, city, country..."
                       value={companySearch}
                       onChange={(e) => setCompanySearch(e.target.value)}
-                      className="w-full rounded-xl border px-4 py-3"
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
 
                   {filteredCompanies.length === 0 ? (
-                    <div className="rounded-xl border bg-slate-50 p-4">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                       No owned companies found.
                     </div>
                   ) : (
@@ -517,35 +591,55 @@ export default function DashboardPage() {
                       {filteredCompanies.map((company) => (
                         <div
                           key={company.id}
-                          className="rounded-xl border bg-white p-4"
+                          className="rounded-2xl border border-slate-200 bg-white p-4"
                         >
-                          <h3 className="font-bold">{company.company_name}</h3>
-                          <p className="text-sm text-slate-500">
-                            {company.city || "Unknown city"},{" "}
-                            {company.country || "Unknown country"}
-                          </p>
+                          <div className="flex items-start gap-3">
+                            <CompanyLogo
+                              logoUrl={company.logo_url}
+                              companyName={company.company_name}
+                            />
+
+                            <div className="min-w-0 flex-1">
+                              <h3 className="truncate text-lg font-semibold text-slate-900">
+                                {company.company_name}
+                              </h3>
+                              <p className="mt-1 text-sm text-slate-500">
+                                {company.city || "Unknown city"},{" "}
+                                {company.country || "Unknown country"}
+                              </p>
+
+                              {company.website && (
+                                <a
+                                  href={normalizeWebsite(company.website) || "#"}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                                >
+                                  {company.website}
+                                </a>
+                              )}
+                            </div>
+                          </div>
 
                           <div className="mt-4 flex flex-wrap gap-2">
                             <Link
                               href={`/companies/${company.id}`}
-                              className="rounded bg-blue-600 px-3 py-1 text-white"
+                              className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
                             >
                               View
                             </Link>
 
                             <Link
                               href={`/dashboard/edit-company/${company.id}`}
-                              className="rounded bg-slate-700 px-3 py-1 text-white"
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                             >
                               Edit
                             </Link>
 
                             <button
                               onClick={() => handleDeleteCompany(company.id)}
-                              disabled={
-                                actionLoading === `delete-company-${company.id}`
-                              }
-                              className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
+                              disabled={actionLoading === `delete-company-${company.id}`}
+                              className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
                             >
                               {actionLoading === `delete-company-${company.id}`
                                 ? "Deleting..."
@@ -556,67 +650,62 @@ export default function DashboardPage() {
                       ))}
                     </div>
                   )}
-                </section>
+                </SectionCard>
 
-                <section className="rounded-2xl border bg-white p-5 shadow-sm">
+                <SectionCard
+                  title="Admin tools"
+                  description="Moderate claims, submissions and inquiries."
+                >
                   <div className="mb-5 flex flex-wrap gap-2">
                     <button
                       onClick={() => setAdminTab("claims")}
-                      className={`rounded-xl px-4 py-2 ${
+                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
                         adminTab === "claims"
                           ? "bg-blue-600 text-white"
-                          : "border bg-white text-slate-700"
+                          : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      Claims{" "}
-                      {pendingClaims > 0 ? `(${pendingClaims} pending)` : ""}
+                      Claims {pendingClaims > 0 ? `(${pendingClaims})` : ""}
                     </button>
 
                     <button
                       onClick={() => setAdminTab("submissions")}
-                      className={`rounded-xl px-4 py-2 ${
+                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
                         adminTab === "submissions"
                           ? "bg-blue-600 text-white"
-                          : "border bg-white text-slate-700"
+                          : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      Submissions{" "}
-                      {pendingSubmissions > 0
-                        ? `(${pendingSubmissions} pending)`
-                        : ""}
+                      Submissions {pendingSubmissions > 0 ? `(${pendingSubmissions})` : ""}
                     </button>
 
                     <button
                       onClick={() => setAdminTab("inquiries")}
-                      className={`rounded-xl px-4 py-2 ${
+                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
                         adminTab === "inquiries"
                           ? "bg-blue-600 text-white"
-                          : "border bg-white text-slate-700"
+                          : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                       }`}
                     >
-                      Inquiries {newInquiries > 0 ? `(${newInquiries} new)` : ""}
+                      Inquiries {newInquiries > 0 ? `(${newInquiries})` : ""}
                     </button>
                   </div>
 
                   {adminTab === "claims" && (
                     <>
-                      <div className="mb-4">
-                        <h2 className="text-2xl font-semibold">Claims</h2>
-                      </div>
-
                       <div className="mb-4 grid gap-3 md:grid-cols-2">
                         <input
                           type="text"
                           placeholder="Search company, email, name, phone..."
                           value={claimSearch}
                           onChange={(e) => setClaimSearch(e.target.value)}
-                          className="rounded-xl border px-4 py-3"
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={claimStatusFilter}
                           onChange={(e) => setClaimStatusFilter(e.target.value)}
-                          className="rounded-xl border px-4 py-3"
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="pending">Pending</option>
@@ -626,83 +715,64 @@ export default function DashboardPage() {
                       </div>
 
                       {filteredClaims.length === 0 ? (
-                        <div className="rounded-xl border bg-slate-50 p-4">
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                           No claims found.
                         </div>
                       ) : (
                         <div className="space-y-4">
                           {filteredClaims.map((claim) => (
-                            <div key={claim.id} className="rounded-xl border p-4">
-                              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                            <div
+                              key={claim.id}
+                              className="rounded-2xl border border-slate-200 p-4"
+                            >
+                              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                                 <div>
-                                  <h3 className="font-bold">
+                                  <h3 className="text-lg font-semibold text-slate-900">
                                     {claim.company_name}
                                   </h3>
-                                  <p className="text-sm text-slate-500">
+                                  <p className="mt-1 text-sm text-slate-500">
                                     Requested: {formatDate(claim.created_at)}
                                   </p>
                                 </div>
 
-                                <div className="text-sm">
-                                  <span className="rounded-full bg-slate-100 px-3 py-1">
-                                    {claim.status}
-                                  </span>
-                                </div>
+                                <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                                  {claim.status}
+                                </span>
                               </div>
 
-                              <div className="mt-3 space-y-1 text-sm text-slate-600">
+                              <div className="mt-4 space-y-1 text-sm text-slate-600">
                                 {claim.full_name && (
-                                  <p>
-                                    <strong>Name:</strong> {claim.full_name}
-                                  </p>
+                                  <p><strong>Name:</strong> {claim.full_name}</p>
                                 )}
                                 {claim.email && (
-                                  <p>
-                                    <strong>Email:</strong> {claim.email}
-                                  </p>
+                                  <p><strong>Email:</strong> {claim.email}</p>
                                 )}
                                 {claim.phone && (
-                                  <p>
-                                    <strong>Phone:</strong> {claim.phone}
-                                  </p>
+                                  <p><strong>Phone:</strong> {claim.phone}</p>
                                 )}
                                 {claim.message && (
-                                  <p>
-                                    <strong>Message:</strong> {claim.message}
-                                  </p>
+                                  <p><strong>Message:</strong> {claim.message}</p>
                                 )}
                               </div>
 
                               {claim.status === "pending" && (
-                                <div className="mt-4 flex gap-2">
+                                <div className="mt-4 flex flex-wrap gap-2">
                                   <button
-                                    onClick={() =>
-                                      updateClaimStatus(claim, "approved")
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `claim-${claim.id}-approved`
-                                    }
-                                    className="rounded bg-green-600 px-3 py-1 text-white disabled:opacity-60"
+                                    onClick={() => updateClaimStatus(claim, "approved")}
+                                    disabled={actionLoading === `claim-${claim.id}-approved`}
+                                    className="rounded-xl bg-green-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
                                   >
-                                    {actionLoading ===
-                                    `claim-${claim.id}-approved`
+                                    {actionLoading === `claim-${claim.id}-approved`
                                       ? "Approving..."
                                       : "Approve"}
                                   </button>
 
                                   <button
-                                    onClick={() =>
-                                      updateClaimStatus(claim, "rejected")
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `claim-${claim.id}-rejected`
-                                    }
-                                    className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
+                                    onClick={() => updateClaimStatus(claim, "rejected")}
+                                    disabled={actionLoading === `claim-${claim.id}-rejected`}
+                                    className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
                                   >
-                                    {actionLoading ===
-                                    `claim-${claim.id}-rejected`
+                                    {actionLoading === `claim-${claim.id}-rejected`
                                       ? "Rejecting..."
                                       : "Reject"}
                                   </button>
@@ -717,27 +787,19 @@ export default function DashboardPage() {
 
                   {adminTab === "submissions" && (
                     <>
-                      <div className="mb-4">
-                        <h2 className="text-2xl font-semibold">
-                          Company Submissions
-                        </h2>
-                      </div>
-
                       <div className="mb-4 grid gap-3 md:grid-cols-2">
                         <input
                           type="text"
                           placeholder="Search company, city, country, email, phone..."
                           value={submissionSearch}
                           onChange={(e) => setSubmissionSearch(e.target.value)}
-                          className="rounded-xl border px-4 py-3"
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={submissionStatusFilter}
-                          onChange={(e) =>
-                            setSubmissionStatusFilter(e.target.value)
-                          }
-                          className="rounded-xl border px-4 py-3"
+                          onChange={(e) => setSubmissionStatusFilter(e.target.value)}
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="pending">Pending</option>
@@ -747,7 +809,7 @@ export default function DashboardPage() {
                       </div>
 
                       {filteredSubmissions.length === 0 ? (
-                        <div className="rounded-xl border bg-slate-50 p-4">
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                           No submissions found.
                         </div>
                       ) : (
@@ -755,88 +817,84 @@ export default function DashboardPage() {
                           {filteredSubmissions.map((submission) => (
                             <div
                               key={submission.id}
-                              className="rounded-xl border p-4"
+                              className="rounded-2xl border border-slate-200 p-4"
                             >
-                              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                                <div>
-                                  <h3 className="font-bold">
-                                    {submission.company_name}
-                                  </h3>
-                                  <p className="text-sm text-slate-500">
-                                    {submission.city || "Unknown city"},{" "}
-                                    {submission.country || "Unknown country"}
-                                  </p>
-                                  <p className="text-sm text-slate-500">
-                                    Submitted: {formatDate(submission.created_at)}
-                                  </p>
-                                </div>
+                              <div className="flex items-start gap-3">
+                                <CompanyLogo
+                                  logoUrl={submission.logo_url}
+                                  companyName={submission.company_name}
+                                  size="sm"
+                                />
 
-                                <div className="text-sm">
-                                  <span className="rounded-full bg-slate-100 px-3 py-1">
-                                    {submission.status}
-                                  </span>
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                    <div>
+                                      <h3 className="text-lg font-semibold text-slate-900">
+                                        {submission.company_name}
+                                      </h3>
+                                      <p className="mt-1 text-sm text-slate-500">
+                                        {submission.city || "Unknown city"},{" "}
+                                        {submission.country || "Unknown country"}
+                                      </p>
+                                      <p className="mt-1 text-sm text-slate-500">
+                                        Submitted: {formatDate(submission.created_at)}
+                                      </p>
+                                    </div>
+
+                                    <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                                      {submission.status}
+                                    </span>
+                                  </div>
+
+                                  <div className="mt-4 space-y-1 text-sm text-slate-600">
+                                    {submission.email && (
+                                      <p><strong>Email:</strong> {submission.email}</p>
+                                    )}
+                                    {submission.phone && (
+                                      <p><strong>Phone:</strong> {submission.phone}</p>
+                                    )}
+                                    {submission.website && (
+                                      <p><strong>Website:</strong> {submission.website}</p>
+                                    )}
+                                  </div>
+
+                                  {submission.status === "pending" && (
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                      <button
+                                        onClick={() =>
+                                          updateSubmissionStatus(submission, "approved")
+                                        }
+                                        disabled={
+                                          actionLoading ===
+                                          `submission-${submission.id}-approved`
+                                        }
+                                        className="rounded-xl bg-green-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      >
+                                        {actionLoading ===
+                                        `submission-${submission.id}-approved`
+                                          ? "Approving..."
+                                          : "Approve"}
+                                      </button>
+
+                                      <button
+                                        onClick={() =>
+                                          updateSubmissionStatus(submission, "rejected")
+                                        }
+                                        disabled={
+                                          actionLoading ===
+                                          `submission-${submission.id}-rejected`
+                                        }
+                                        className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      >
+                                        {actionLoading ===
+                                        `submission-${submission.id}-rejected`
+                                          ? "Rejecting..."
+                                          : "Reject"}
+                                      </button>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
-
-                              <div className="mt-3 space-y-1 text-sm text-slate-600">
-                                {submission.email && (
-                                  <p>
-                                    <strong>Email:</strong> {submission.email}
-                                  </p>
-                                )}
-                                {submission.phone && (
-                                  <p>
-                                    <strong>Phone:</strong> {submission.phone}
-                                  </p>
-                                )}
-                                {submission.website && (
-                                  <p>
-                                    <strong>Website:</strong> {submission.website}
-                                  </p>
-                                )}
-                              </div>
-
-                              {submission.status === "pending" && (
-                                <div className="mt-4 flex gap-2">
-                                  <button
-                                    onClick={() =>
-                                      updateSubmissionStatus(
-                                        submission,
-                                        "approved"
-                                      )
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `submission-${submission.id}-approved`
-                                    }
-                                    className="rounded bg-green-600 px-3 py-1 text-white disabled:opacity-60"
-                                  >
-                                    {actionLoading ===
-                                    `submission-${submission.id}-approved`
-                                      ? "Approving..."
-                                      : "Approve"}
-                                  </button>
-
-                                  <button
-                                    onClick={() =>
-                                      updateSubmissionStatus(
-                                        submission,
-                                        "rejected"
-                                      )
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `submission-${submission.id}-rejected`
-                                    }
-                                    className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
-                                  >
-                                    {actionLoading ===
-                                    `submission-${submission.id}-rejected`
-                                      ? "Rejecting..."
-                                      : "Reject"}
-                                  </button>
-                                </div>
-                              )}
                             </div>
                           ))}
                         </div>
@@ -846,23 +904,19 @@ export default function DashboardPage() {
 
                   {adminTab === "inquiries" && (
                     <>
-                      <div className="mb-4">
-                        <h2 className="text-2xl font-semibold">Inquiries</h2>
-                      </div>
-
                       <div className="mb-4 grid gap-3 md:grid-cols-2">
                         <input
                           type="text"
                           placeholder="Search company, sender, email, message..."
                           value={inquirySearch}
                           onChange={(e) => setInquirySearch(e.target.value)}
-                          className="rounded-xl border px-4 py-3"
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={inquiryStatusFilter}
                           onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                          className="rounded-xl border px-4 py-3"
+                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="new">New</option>
@@ -872,7 +926,7 @@ export default function DashboardPage() {
                       </div>
 
                       {filteredInquiries.length === 0 ? (
-                        <div className="rounded-xl border bg-slate-50 p-4">
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                           No inquiries found.
                         </div>
                       ) : (
@@ -880,83 +934,79 @@ export default function DashboardPage() {
                           {filteredInquiries.map((inquiry) => (
                             <div
                               key={inquiry.id}
-                              className="rounded-xl border p-4"
+                              className="rounded-2xl border border-slate-200 p-4"
                             >
-                              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                                <div>
-                                  <h3 className="font-bold">
-                                    {inquiry.sender_name}
-                                  </h3>
-                                  <p className="text-sm text-slate-500">
-                                    Company: {inquiry.company_name}
+                              <div className="flex items-start gap-3">
+                                <CompanyLogo
+                                  logoUrl={inquiry.company_logo_url}
+                                  companyName={inquiry.company_name}
+                                  size="sm"
+                                />
+
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                    <div>
+                                      <h3 className="text-lg font-semibold text-slate-900">
+                                        {inquiry.sender_name}
+                                      </h3>
+                                      <p className="mt-1 text-sm text-slate-500">
+                                        Company: {inquiry.company_name}
+                                      </p>
+                                      <p className="mt-1 text-sm text-slate-500">
+                                        {inquiry.sender_email}
+                                      </p>
+                                      {inquiry.sender_phone && (
+                                        <p className="mt-1 text-sm text-slate-500">
+                                          {inquiry.sender_phone}
+                                        </p>
+                                      )}
+                                      <p className="mt-1 text-sm text-slate-500">
+                                        {formatDate(inquiry.created_at)}
+                                      </p>
+                                    </div>
+
+                                    <span className="w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                                      {inquiry.status}
+                                    </span>
+                                  </div>
+
+                                  <p className="mt-4 whitespace-pre-line text-sm text-slate-700">
+                                    {inquiry.message}
                                   </p>
-                                  <p className="text-sm text-slate-500">
-                                    {inquiry.sender_email}
-                                  </p>
-                                  {inquiry.sender_phone && (
-                                    <p className="text-sm text-slate-500">
-                                      {inquiry.sender_phone}
-                                    </p>
-                                  )}
-                                  <p className="mt-1 text-sm text-slate-500">
-                                    {formatDate(inquiry.created_at)}
-                                  </p>
+
+                                  <div className="mt-4 flex flex-wrap gap-2">
+                                    <Link
+                                      href={`/companies/${inquiry.company_id}`}
+                                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                    >
+                                      Open company
+                                    </Link>
+
+                                    {inquiry.status !== "read" && (
+                                      <button
+                                        onClick={() => updateInquiryStatus(inquiry, "read")}
+                                        disabled={actionLoading === `inquiry-${inquiry.id}-read`}
+                                        className="rounded-xl bg-slate-800 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      >
+                                        {actionLoading === `inquiry-${inquiry.id}-read`
+                                          ? "Saving..."
+                                          : "Mark as read"}
+                                      </button>
+                                    )}
+
+                                    {inquiry.status !== "closed" && (
+                                      <button
+                                        onClick={() => updateInquiryStatus(inquiry, "closed")}
+                                        disabled={actionLoading === `inquiry-${inquiry.id}-closed`}
+                                        className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      >
+                                        {actionLoading === `inquiry-${inquiry.id}-closed`
+                                          ? "Closing..."
+                                          : "Mark as closed"}
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
-
-                                <div className="text-sm">
-                                  <span className="rounded-full bg-slate-100 px-3 py-1">
-                                    {inquiry.status}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <p className="mt-4 whitespace-pre-line text-sm text-slate-700">
-                                {inquiry.message}
-                              </p>
-
-                              <div className="mt-4 flex flex-wrap gap-2">
-                                <Link
-                                  href={`/companies/${inquiry.company_id}`}
-                                  className="rounded border px-3 py-1 text-sm text-slate-700 hover:bg-slate-50"
-                                >
-                                  Open company
-                                </Link>
-
-                                {inquiry.status !== "read" && (
-                                  <button
-                                    onClick={() =>
-                                      updateInquiryStatus(inquiry, "read")
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `inquiry-${inquiry.id}-read`
-                                    }
-                                    className="rounded bg-slate-700 px-3 py-1 text-white disabled:opacity-60"
-                                  >
-                                    {actionLoading ===
-                                    `inquiry-${inquiry.id}-read`
-                                      ? "Saving..."
-                                      : "Mark as read"}
-                                  </button>
-                                )}
-
-                                {inquiry.status !== "closed" && (
-                                  <button
-                                    onClick={() =>
-                                      updateInquiryStatus(inquiry, "closed")
-                                    }
-                                    disabled={
-                                      actionLoading ===
-                                      `inquiry-${inquiry.id}-closed`
-                                    }
-                                    className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
-                                  >
-                                    {actionLoading ===
-                                    `inquiry-${inquiry.id}-closed`
-                                      ? "Closing..."
-                                      : "Mark as closed"}
-                                  </button>
-                                )}
                               </div>
                             </div>
                           ))}
@@ -964,50 +1014,44 @@ export default function DashboardPage() {
                       )}
                     </>
                   )}
-                </section>
+                </SectionCard>
               </>
             ) : (
               <>
-                <section className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">My companies</p>
-                    <p className="mt-2 text-3xl font-bold">{myCompanies.length}</p>
-                  </div>
-
-                  <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <p className="text-sm text-slate-500">My inquiries</p>
-                    <p className="mt-2 text-3xl font-bold">{inquiries.length}</p>
-                    <p className="mt-2 text-sm text-slate-500">
-                      New: {newInquiries} · Read: {readInquiries} · Closed:{" "}
-                      {closedInquiries}
-                    </p>
-                  </div>
+                <section className="grid gap-4 sm:grid-cols-2">
+                  <StatCard label="My companies" value={myCompanies.length} />
+                  <StatCard
+                    label="My inquiries"
+                    value={inquiries.length}
+                    subtext={`New: ${newInquiries} · Read: ${readInquiries} · Closed: ${closedInquiries}`}
+                  />
                 </section>
 
-                <section className="grid gap-8 lg:grid-cols-2">
-                  <section className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                      <h2 className="text-2xl font-semibold">My Companies</h2>
+                <div className="grid gap-6 xl:grid-cols-2">
+                  <SectionCard
+                    title="My Companies"
+                    description="Manage your company profiles."
+                    right={
                       <Link
                         href="/add-company"
-                        className="rounded-xl bg-blue-600 px-4 py-2 text-center text-white"
+                        className="rounded-2xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
                       >
                         Add company
                       </Link>
-                    </div>
-
-                    <div className="mb-4">
+                    }
+                  >
+                    <div className="mb-5">
                       <input
                         type="text"
-                        placeholder="Search company..."
+                        placeholder="Search company, city, country..."
                         value={companySearch}
                         onChange={(e) => setCompanySearch(e.target.value)}
-                        className="w-full rounded-xl border px-4 py-3"
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
 
                     {filteredCompanies.length === 0 ? (
-                      <div className="rounded-xl border bg-slate-50 p-4">
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                         No owned companies found.
                       </div>
                     ) : (
@@ -1015,39 +1059,57 @@ export default function DashboardPage() {
                         {filteredCompanies.map((company) => (
                           <div
                             key={company.id}
-                            className="rounded-xl border p-4"
+                            className="rounded-2xl border border-slate-200 p-4"
                           >
-                            <h3 className="font-bold">{company.company_name}</h3>
-                            <p className="text-sm text-slate-500">
-                              {company.city || "Unknown city"},{" "}
-                              {company.country || "Unknown country"}
-                            </p>
+                            <div className="flex items-start gap-3">
+                              <CompanyLogo
+                                logoUrl={company.logo_url}
+                                companyName={company.company_name}
+                              />
+
+                              <div className="min-w-0 flex-1">
+                                <h3 className="truncate text-lg font-semibold text-slate-900">
+                                  {company.company_name}
+                                </h3>
+                                <p className="mt-1 text-sm text-slate-500">
+                                  {company.city || "Unknown city"},{" "}
+                                  {company.country || "Unknown country"}
+                                </p>
+
+                                {company.website && (
+                                  <a
+                                    href={normalizeWebsite(company.website) || "#"}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                                  >
+                                    {company.website}
+                                  </a>
+                                )}
+                              </div>
+                            </div>
 
                             <div className="mt-4 flex flex-wrap gap-2">
                               <Link
                                 href={`/companies/${company.id}`}
-                                className="rounded bg-blue-600 px-3 py-1 text-white"
+                                className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
                               >
                                 View
                               </Link>
 
                               <Link
                                 href={`/dashboard/edit-company/${company.id}`}
-                                className="rounded bg-slate-700 px-3 py-1 text-white"
+                                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                               >
                                 Edit
                               </Link>
 
                               <button
                                 onClick={() => handleDeleteCompany(company.id)}
-                                disabled={
-                                  actionLoading ===
-                                  `delete-company-${company.id}`
-                                }
-                                className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
+                                disabled={actionLoading === `delete-company-${company.id}`}
+                                className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
                               >
-                                {actionLoading ===
-                                `delete-company-${company.id}`
+                                {actionLoading === `delete-company-${company.id}`
                                   ? "Deleting..."
                                   : "Delete"}
                               </button>
@@ -1056,26 +1118,25 @@ export default function DashboardPage() {
                         ))}
                       </div>
                     )}
-                  </section>
+                  </SectionCard>
 
-                  <section className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <div className="mb-4">
-                      <h2 className="text-2xl font-semibold">My Inquiries</h2>
-                    </div>
-
+                  <SectionCard
+                    title="My Inquiries"
+                    description="Messages sent to your companies."
+                  >
                     <div className="mb-4 grid gap-3">
                       <input
                         type="text"
                         placeholder="Search inquiry..."
                         value={inquirySearch}
                         onChange={(e) => setInquirySearch(e.target.value)}
-                        className="rounded-xl border px-4 py-3"
+                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
 
                       <select
                         value={inquiryStatusFilter}
                         onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                        className="rounded-xl border px-4 py-3"
+                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       >
                         <option value="all">All statuses</option>
                         <option value="new">New</option>
@@ -1085,7 +1146,7 @@ export default function DashboardPage() {
                     </div>
 
                     {filteredInquiries.length === 0 ? (
-                      <div className="rounded-xl border bg-slate-50 p-4">
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                         No inquiries found.
                       </div>
                     ) : (
@@ -1093,72 +1154,73 @@ export default function DashboardPage() {
                         {filteredInquiries.map((inquiry) => (
                           <div
                             key={inquiry.id}
-                            className="rounded-xl border p-4"
+                            className="rounded-2xl border border-slate-200 p-4"
                           >
-                            <h3 className="font-bold">{inquiry.sender_name}</h3>
-                            <p className="text-sm text-slate-500">
-                              Company: {inquiry.company_name}
-                            </p>
-                            <p className="text-sm text-slate-500">
-                              {inquiry.sender_email}
-                            </p>
-                            <p className="text-sm text-slate-500">
-                              {formatDate(inquiry.created_at)}
-                            </p>
-                            <p className="mt-3 whitespace-pre-line text-sm text-slate-700">
-                              {inquiry.message}
-                            </p>
+                            <div className="flex items-start gap-3">
+                              <CompanyLogo
+                                logoUrl={inquiry.company_logo_url}
+                                companyName={inquiry.company_name}
+                                size="sm"
+                              />
 
-                            <div className="mt-4 flex flex-wrap gap-2">
-                              <Link
-                                href={`/companies/${inquiry.company_id}`}
-                                className="rounded border px-3 py-1 text-sm text-slate-700 hover:bg-slate-50"
-                              >
-                                Open company
-                              </Link>
+                              <div className="min-w-0 flex-1">
+                                <h3 className="text-lg font-semibold text-slate-900">
+                                  {inquiry.sender_name}
+                                </h3>
+                                <p className="mt-1 text-sm text-slate-500">
+                                  Company: {inquiry.company_name}
+                                </p>
+                                <p className="mt-1 text-sm text-slate-500">
+                                  {inquiry.sender_email}
+                                </p>
+                                <p className="mt-1 text-sm text-slate-500">
+                                  {formatDate(inquiry.created_at)}
+                                </p>
 
-                              {inquiry.status !== "read" && (
-                                <button
-                                  onClick={() =>
-                                    updateInquiryStatus(inquiry, "read")
-                                  }
-                                  disabled={
-                                    actionLoading ===
-                                    `inquiry-${inquiry.id}-read`
-                                  }
-                                  className="rounded bg-slate-700 px-3 py-1 text-white disabled:opacity-60"
-                                >
-                                  {actionLoading ===
-                                  `inquiry-${inquiry.id}-read`
-                                    ? "Saving..."
-                                    : "Mark as read"}
-                                </button>
-                              )}
+                                <p className="mt-4 whitespace-pre-line text-sm text-slate-700">
+                                  {inquiry.message}
+                                </p>
 
-                              {inquiry.status !== "closed" && (
-                                <button
-                                  onClick={() =>
-                                    updateInquiryStatus(inquiry, "closed")
-                                  }
-                                  disabled={
-                                    actionLoading ===
-                                    `inquiry-${inquiry.id}-closed`
-                                  }
-                                  className="rounded bg-red-600 px-3 py-1 text-white disabled:opacity-60"
-                                >
-                                  {actionLoading ===
-                                  `inquiry-${inquiry.id}-closed`
-                                    ? "Closing..."
-                                    : "Mark as closed"}
-                                </button>
-                              )}
+                                <div className="mt-4 flex flex-wrap gap-2">
+                                  <Link
+                                    href={`/companies/${inquiry.company_id}`}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                  >
+                                    Open company
+                                  </Link>
+
+                                  {inquiry.status !== "read" && (
+                                    <button
+                                      onClick={() => updateInquiryStatus(inquiry, "read")}
+                                      disabled={actionLoading === `inquiry-${inquiry.id}-read`}
+                                      className="rounded-xl bg-slate-800 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                    >
+                                      {actionLoading === `inquiry-${inquiry.id}-read`
+                                        ? "Saving..."
+                                        : "Mark as read"}
+                                    </button>
+                                  )}
+
+                                  {inquiry.status !== "closed" && (
+                                    <button
+                                      onClick={() => updateInquiryStatus(inquiry, "closed")}
+                                      disabled={actionLoading === `inquiry-${inquiry.id}-closed`}
+                                      className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                    >
+                                      {actionLoading === `inquiry-${inquiry.id}-closed`
+                                        ? "Closing..."
+                                        : "Mark as closed"}
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
-                  </section>
-                </section>
+                  </SectionCard>
+                </div>
               </>
             )}
           </>

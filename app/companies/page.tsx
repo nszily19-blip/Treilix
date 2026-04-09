@@ -8,10 +8,10 @@ import { createClient } from "@/lib/supabase/client";
 
 type Company = {
   id: string;
+  logo_url?: string | null;
   company_name: string | null;
   country: string | null;
   city: string | null;
-  description: string | null;
   website: string | null;
   service_countries: string[] | null;
   transport_types: string[] | null;
@@ -25,12 +25,6 @@ function uniqueSorted(values: string[]) {
   );
 }
 
-function normalizeWebsite(url: string | null) {
-  if (!url) return null;
-  if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  return `https://${url}`;
-}
-
 function toggleValue(
   value: string,
   list: string[],
@@ -41,6 +35,76 @@ function toggleValue(
   } else {
     setList([...list, value]);
   }
+}
+
+function normalizeWebsite(url: string | null) {
+  if (!url) return null;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://${url}`;
+}
+
+function getInitials(name?: string | null) {
+  if (!name) return "C";
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function CompanyLogo({
+  logoUrl,
+  companyName,
+}: {
+  logoUrl?: string | null;
+  companyName?: string | null;
+}) {
+  if (logoUrl) {
+    return (
+      <img
+        src={logoUrl}
+        alt={companyName || "Company logo"}
+        className="h-16 w-16 rounded-2xl border border-slate-200 bg-white object-cover"
+      />
+    );
+  }
+
+  return (
+    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-lg font-semibold text-slate-500">
+      {getInitials(companyName)}
+    </div>
+  );
+}
+
+function FilterChip({
+  label,
+  active,
+  onClick,
+  variant = "default",
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  variant?: "default" | "blue" | "green";
+}) {
+  const styles =
+    variant === "blue"
+      ? active
+        ? "bg-blue-600 text-white"
+        : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+      : variant === "green"
+      ? active
+        ? "bg-emerald-600 text-white"
+        : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+      : active
+      ? "bg-slate-900 text-white"
+      : "bg-slate-100 text-slate-700 hover:bg-slate-200";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${styles}`}
+    >
+      {label}
+    </button>
+  );
 }
 
 export default function CompaniesPage() {
@@ -79,7 +143,7 @@ export default function CompaniesPage() {
       const { data, error } = await supabase
         .from("companies")
         .select(
-          "id, company_name, country, city, description, website, service_countries, transport_types, vehicle_types, created_at"
+          "id, company_name, country, city, website, logo_url, service_countries, transport_types, vehicle_types, created_at"
         )
         .order("created_at", { ascending: false });
 
@@ -125,7 +189,7 @@ export default function CompaniesPage() {
         company.company_name || "",
         company.country || "",
         company.city || "",
-        company.description || "",
+        company.website || "",
         ...(company.service_countries || []),
         ...(company.transport_types || []),
         ...(company.vehicle_types || []),
@@ -221,18 +285,14 @@ export default function CompaniesPage() {
           </p>
           <div className="flex flex-wrap gap-2">
             {availableServiceCountries.map((item) => (
-              <button
+              <FilterChip
                 key={item}
-                type="button"
-                onClick={() => toggleValue(item, serviceFilters, setServiceFilters)}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
-                  serviceFilters.includes(item)
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                {item}
-              </button>
+                label={item}
+                active={serviceFilters.includes(item)}
+                onClick={() =>
+                  toggleValue(item, serviceFilters, setServiceFilters)
+                }
+              />
             ))}
           </div>
         </div>
@@ -245,20 +305,15 @@ export default function CompaniesPage() {
           </p>
           <div className="flex flex-wrap gap-2">
             {availableTransportTypes.map((item) => (
-              <button
+              <FilterChip
                 key={item}
-                type="button"
+                label={item}
+                active={transportFilters.includes(item)}
                 onClick={() =>
                   toggleValue(item, transportFilters, setTransportFilters)
                 }
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
-                  transportFilters.includes(item)
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-50 text-blue-700 hover:bg-blue-100"
-                }`}
-              >
-                {item}
-              </button>
+                variant="blue"
+              />
             ))}
           </div>
         </div>
@@ -271,18 +326,15 @@ export default function CompaniesPage() {
           </p>
           <div className="flex flex-wrap gap-2">
             {availableVehicleTypes.map((item) => (
-              <button
+              <FilterChip
                 key={item}
-                type="button"
-                onClick={() => toggleValue(item, vehicleFilters, setVehicleFilters)}
-                className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
-                  vehicleFilters.includes(item)
-                    ? "bg-emerald-600 text-white"
-                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                }`}
-              >
-                {item}
-              </button>
+                label={item}
+                active={vehicleFilters.includes(item)}
+                onClick={() =>
+                  toggleValue(item, vehicleFilters, setVehicleFilters)
+                }
+                variant="green"
+              />
             ))}
           </div>
         </div>
@@ -307,8 +359,7 @@ export default function CompaniesPage() {
               Companies
             </h1>
             <p className="mt-2 max-w-2xl text-slate-600">
-              Search transport and logistics companies by country, service area,
-              transport type, and vehicle type.
+              Browse transport and logistics companies on Treilix.
             </p>
           </div>
 
@@ -321,7 +372,7 @@ export default function CompaniesPage() {
           </button>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
           <aside className="hidden lg:block">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               {FiltersContent}
@@ -342,16 +393,20 @@ export default function CompaniesPage() {
             </div>
 
             {loading ? (
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-4 xl:grid-cols-2">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
                     className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
                   >
-                    <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200" />
-                    <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                    <div className="mt-4 h-4 w-full animate-pulse rounded bg-slate-200" />
-                    <div className="mt-2 h-4 w-5/6 animate-pulse rounded bg-slate-200" />
+                    <div className="flex items-start gap-4">
+                      <div className="h-16 w-16 animate-pulse rounded-2xl bg-slate-200" />
+                      <div className="min-w-0 flex-1">
+                        <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/3 animate-pulse rounded bg-slate-200" />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -365,7 +420,7 @@ export default function CompaniesPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-4 xl:grid-cols-2">
                 {filteredCompanies.map((company) => {
                   const websiteUrl = normalizeWebsite(company.website);
 
@@ -374,11 +429,16 @@ export default function CompaniesPage() {
                       key={company.id}
                       className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
+                      <div className="flex items-start gap-4">
+                        <CompanyLogo
+                          logoUrl={company.logo_url}
+                          companyName={company.company_name}
+                        />
+
+                        <div className="min-w-0 flex-1">
                           <Link
                             href={`/companies/${company.id}`}
-                            className="block text-lg font-semibold text-slate-900 hover:text-blue-700"
+                            className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
                           >
                             {company.company_name}
                           </Link>
@@ -387,92 +447,34 @@ export default function CompaniesPage() {
                             {company.city || "Unknown city"},{" "}
                             {company.country || "Unknown country"}
                           </p>
-                        </div>
-                      </div>
 
-                      <p className="mt-4 line-clamp-3 text-sm leading-6 text-slate-600">
-                        {company.description || "No description yet."}
-                      </p>
+                          {websiteUrl && (
+                            <a
+                              href={websiteUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                            >
+                              {company.website}
+                            </a>
+                          )}
 
-                      {!!company.service_countries?.length && (
-                        <div className="mt-4">
-                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            Service countries
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {company.service_countries.map((item) => (
-                              <span
-                                key={item}
-                                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
-                              >
-                                {item}
-                              </span>
-                            ))}
+                          <div className="mt-4 flex flex-wrap gap-2">
+                            <Link
+                              href={`/companies/${company.id}`}
+                              className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                            >
+                              View details
+                            </Link>
+
+                            <Link
+                              href={`/companies/${company.id}/contact`}
+                              className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            >
+                              Contact
+                            </Link>
                           </div>
                         </div>
-                      )}
-
-                      {!!company.transport_types?.length && (
-                        <div className="mt-4">
-                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            Transport types
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {company.transport_types.map((item) => (
-                              <span
-                                key={item}
-                                className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700"
-                              >
-                                {item}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {!!company.vehicle_types?.length && (
-                        <div className="mt-4">
-                          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            Vehicle types
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {company.vehicle_types.map((item) => (
-                              <span
-                                key={item}
-                                className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700"
-                              >
-                                {item}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="mt-5 flex flex-wrap gap-2">
-                        <Link
-                          href={`/companies/${company.id}`}
-                          className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-                        >
-                          View details
-                        </Link>
-
-                        <Link
-                          href={`/companies/${company.id}/contact`}
-                          className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                        >
-                          Contact
-                        </Link>
-
-                        {websiteUrl && (
-                          <a
-                            href={websiteUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                          >
-                            Website
-                          </a>
-                        )}
                       </div>
                     </div>
                   );

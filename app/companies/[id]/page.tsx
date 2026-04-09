@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 type Company = {
   id: string;
+  logo_url?: string | null;
   company_name: string | null;
   country: string | null;
   city: string | null;
@@ -29,6 +30,35 @@ function normalizeWebsite(url: string | null) {
   if (!url) return null;
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
   return `https://${url}`;
+}
+
+function getInitials(name?: string | null) {
+  if (!name) return "C";
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function CompanyLogo({
+  logoUrl,
+  companyName,
+}: {
+  logoUrl?: string | null;
+  companyName?: string | null;
+}) {
+  if (logoUrl) {
+    return (
+      <img
+        src={logoUrl}
+        alt={companyName || "Company logo"}
+        className="h-20 w-20 rounded-3xl border border-slate-200 bg-white object-cover md:h-24 md:w-24"
+      />
+    );
+  }
+
+  return (
+    <div className="flex h-20 w-20 items-center justify-center rounded-3xl border border-slate-200 bg-slate-100 text-2xl font-semibold text-slate-500 md:h-24 md:w-24">
+      {getInitials(companyName)}
+    </div>
+  );
 }
 
 export default function CompanyDetailPage() {
@@ -84,8 +114,13 @@ export default function CompanyDetailPage() {
       <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
         <div className="mx-auto max-w-7xl space-y-6">
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="h-8 w-64 animate-pulse rounded bg-slate-200" />
-            <div className="mt-3 h-5 w-40 animate-pulse rounded bg-slate-200" />
+            <div className="flex items-start gap-4">
+              <div className="h-20 w-20 animate-pulse rounded-3xl bg-slate-200" />
+              <div className="flex-1">
+                <div className="h-8 w-64 animate-pulse rounded bg-slate-200" />
+                <div className="mt-3 h-5 w-40 animate-pulse rounded bg-slate-200" />
+              </div>
+            </div>
             <div className="mt-6 h-24 w-full animate-pulse rounded bg-slate-200" />
           </div>
 
@@ -156,21 +191,30 @@ export default function CompanyDetailPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0">
-              <div className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-                Company profile
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start gap-4">
+                <CompanyLogo
+                  logoUrl={company.logo_url}
+                  companyName={company.company_name}
+                />
+
+                <div className="min-w-0 flex-1">
+                  <div className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                    Company profile
+                  </div>
+
+                  <h1 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
+                    {company.company_name}
+                  </h1>
+
+                  <p className="mt-3 text-base text-slate-600">
+                    {company.city || "Unknown city"}, {company.country || "Unknown country"}
+                  </p>
+                </div>
               </div>
 
-              <h1 className="mt-4 text-3xl font-bold text-slate-900 md:text-4xl">
-                {company.company_name}
-              </h1>
-
-              <p className="mt-3 text-base text-slate-600">
-                {company.city || "Unknown city"}, {company.country || "Unknown country"}
-              </p>
-
               {!!company.service_countries?.length && (
-                <div className="mt-5">
+                <div className="mt-6">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Service countries
                   </p>

@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
-      <div className="mx-auto max-w-4xl rounded-3xl border bg-white p-6 shadow-sm md:p-10">
+      <div className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
         <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
           Privacy Policy
         </h1>
@@ -15,11 +15,14 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-slate-900">
             1. Who we are
           </h2>
-          <p className="mt-3 text-sm leading-7 text-slate-700">
-            Treilix is a platform that helps users discover transport and
-            logistics companies, send inquiries, and lets company owners claim
-            and manage their listings.
-          </p>
+          <div className="mt-3 text-sm leading-7 text-slate-700 space-y-1">
+            <p><strong>Treilix</strong></p>
+            <p>Szilard Nagy</p>
+            <p>Putzbrunner Straße 20</p>
+            <p>81737 München</p>
+            <p>Germany</p>
+            <p>Email: info@treilix.com</p>
+          </div>
         </section>
 
         <section className="mt-8">
@@ -33,7 +36,7 @@ export default function PrivacyPage() {
               <li>Name, email address, and phone number submitted in inquiries</li>
               <li>Company information submitted or edited by users</li>
               <li>Claim request information</li>
-              <li>Technical information such as browser type, device, and IP-related request data</li>
+              <li>Technical information such as browser type and request data</li>
               <li>Cookie preferences stored in your browser</li>
             </ul>
           </div>
@@ -47,11 +50,10 @@ export default function PrivacyPage() {
             <p>We process personal data in order to:</p>
             <ul className="list-disc space-y-2 pl-5">
               <li>Create and manage user accounts</li>
-              <li>Allow users to send company inquiries</li>
-              <li>Allow company owners to claim and manage company listings</li>
-              <li>Review and process submissions and claim requests</li>
-              <li>Operate, maintain, and improve the Treilix platform</li>
-              <li>Send service-related communication where necessary</li>
+              <li>Enable company inquiries</li>
+              <li>Allow claiming and managing company profiles</li>
+              <li>Review submissions and claims</li>
+              <li>Operate and improve the platform</li>
             </ul>
           </div>
         </section>
@@ -61,15 +63,11 @@ export default function PrivacyPage() {
             4. Legal basis
           </h2>
           <div className="mt-3 space-y-3 text-sm leading-7 text-slate-700">
-            <p>
-              We process data based on one or more of the following legal bases,
-              depending on the context:
-            </p>
             <ul className="list-disc space-y-2 pl-5">
               <li>Your consent</li>
-              <li>The performance of a contract or pre-contractual steps</li>
-              <li>Our legitimate interests in operating and improving the platform</li>
-              <li>Compliance with legal obligations</li>
+              <li>Performance of a contract</li>
+              <li>Legitimate interest</li>
+              <li>Legal obligations</li>
             </ul>
           </div>
         </section>
@@ -79,34 +77,22 @@ export default function PrivacyPage() {
             5. Third-party services
           </h2>
           <div className="mt-3 space-y-3 text-sm leading-7 text-slate-700">
-            <p>Treilix may use third-party services to operate the platform, including:</p>
             <ul className="list-disc space-y-2 pl-5">
-              <li>Supabase for authentication, database, and backend services</li>
-              <li>Resend for sending transactional emails</li>
-              <li>Hosting providers used to publish and run the website</li>
+              <li>Supabase (database & authentication)</li>
+              <li>Resend (email sending)</li>
+              <li>Hosting providers</li>
             </ul>
-            <p>
-              These services may process data on our behalf to the extent
-              necessary for the platform to function.
-            </p>
           </div>
         </section>
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
-            6. Cookies and local storage
+            6. Cookies
           </h2>
-          <div className="mt-3 space-y-3 text-sm leading-7 text-slate-700">
-            <p>
-              Treilix may use cookies and browser storage technologies to keep
-              the website functioning properly, remember preferences, and improve
-              the user experience.
-            </p>
-            <p>
-              You can manage your cookie choices through the cookie banner where
-              available, and through your browser settings.
-            </p>
-          </div>
+          <p className="mt-3 text-sm leading-7 text-slate-700">
+            We use cookies and similar technologies to ensure proper functionality
+            and improve user experience. You can manage cookies in your browser settings.
+          </p>
         </section>
 
         <section className="mt-8">
@@ -114,9 +100,8 @@ export default function PrivacyPage() {
             7. Data retention
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-700">
-            We keep personal data only for as long as necessary to provide the
-            service, fulfill legitimate business purposes, resolve disputes,
-            enforce agreements, and meet legal obligations.
+            Data is stored only as long as necessary to provide the service and
+            fulfill legal obligations.
           </p>
         </section>
 
@@ -124,53 +109,34 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-slate-900">
             8. Your rights
           </h2>
-          <div className="mt-3 space-y-3 text-sm leading-7 text-slate-700">
-            <p>Depending on applicable law, you may have the right to:</p>
-            <ul className="list-disc space-y-2 pl-5">
-              <li>Access your personal data</li>
-              <li>Correct inaccurate data</li>
-              <li>Request deletion of your data</li>
-              <li>Restrict or object to certain processing</li>
-              <li>Request data portability</li>
-              <li>Withdraw consent where processing is based on consent</li>
-            </ul>
-          </div>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-700">
+            <li>Access your data</li>
+            <li>Correct your data</li>
+            <li>Delete your data</li>
+            <li>Object to processing</li>
+            <li>Data portability</li>
+          </ul>
         </section>
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
-            9. Data security
+            9. Security
           </h2>
           <p className="mt-3 text-sm leading-7 text-slate-700">
-            We take reasonable technical and organizational measures to protect
-            personal data against unauthorized access, disclosure, alteration,
-            and destruction. However, no internet-based service can be guaranteed
-            to be completely secure.
+            We use appropriate technical measures to protect your data.
           </p>
         </section>
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-slate-900">
-            10. Changes to this Privacy Policy
+            10. Contact
           </h2>
-          <p className="mt-3 text-sm leading-7 text-slate-700">
-            We may update this Privacy Policy from time to time. The latest
-            version will always be available on this page.
-          </p>
-        </section>
-
-        <section className="mt-8">
-          <h2 className="text-xl font-semibold text-slate-900">
-            11. Contact
-          </h2>
-          <div className="mt-3 space-y-2 text-sm leading-7 text-slate-700">
-            <p>
-              If you have questions about this Privacy Policy or about your
-              personal data, you can contact:
-            </p>
-            <p>
-              <strong>Treilix</strong>
-            </p>
+          <div className="mt-3 text-sm leading-7 text-slate-700 space-y-1">
+            <p><strong>Treilix</strong></p>
+            <p>Szilard Nagy</p>
+            <p>Putzbrunner Straße 20</p>
+            <p>81737 München</p>
+            <p>Germany</p>
             <p>Email: info@treilix.com</p>
           </div>
         </section>
