@@ -4,9 +4,11 @@ import RootShell from "./components/RootShell";
 
 export const metadata: Metadata = {
   title: "Treilix",
-  description: "European transport directory",
+   description: "Find transport companies in Europe",
+  verification: {
+    google: "7cbcb6e150c56eaa",
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
