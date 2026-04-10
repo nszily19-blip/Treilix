@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Treilix",
    description: "Find transport companies in Europe",
   verification: {
-    google: "7cbcb6e150c56eaa",
+    google: "fHwSvCJm6lbcnwE14naTRHsEYl0tRbrNj41eopZpJJQ",
   },
 };
 export default function RootLayout({
