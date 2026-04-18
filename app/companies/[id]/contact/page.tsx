@@ -69,12 +69,22 @@ export default function CompanyContactPage() {
         }
       }
 
-      const { data, error } = await supabase
-        .from("companies")
-        .select("*")
-        .eq("id", id)
-        .single();
+      let { data, error } = await supabase
+  .from("companies")
+  .select("*")
+  .eq("slug", id)
+  .maybeSingle();
 
+if (!data) {
+  const fallback = await supabase
+    .from("companies")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  data = fallback.data;
+  error = fallback.error;
+}
       if (!error && data) {
         setCompany(data as Company);
       } else {

@@ -91,7 +91,7 @@ export default function AddCompanyPage() {
 
     if (logoFile) {
       const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
-      const maxSize = 2 * 1024 * 1024; // 2 MB
+      const maxSize = 2 * 1024 * 1024;
 
       if (!allowedTypes.includes(logoFile.type)) {
         setMessage("Logo must be a PNG, JPG, JPEG or WEBP image.");
@@ -129,6 +129,9 @@ export default function AddCompanyPage() {
       logoUrl = publicUrlData.publicUrl;
     }
 
+    const baseSlug = slugify(`${companyName}-${country || "europe"}`);
+    const slug = `${baseSlug}-${Date.now()}`;
+
     const { error } = await supabase.from("company_submissions").insert([
       {
         company_name: companyName.trim(),
@@ -142,6 +145,7 @@ export default function AddCompanyPage() {
         website: website.trim(),
         description: description.trim(),
         logo_url: logoUrl,
+        slug,
         user_id: user.id,
         status: "pending",
       },

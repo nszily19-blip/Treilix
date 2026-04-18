@@ -19,6 +19,7 @@ type Claim = {
 
 type Submission = {
   id: string;
+  slug?: string | null;
   logo_url: string | null;
   company_name: string | null;
   country: string | null;
@@ -37,6 +38,7 @@ type Submission = {
 
 type Company = {
   id: string;
+  slug?: string | null;
   company_name: string | null;
   country: string | null;
   city: string | null;
@@ -372,6 +374,7 @@ export default function DashboardPage() {
             description: submission.description,
             logo_url: submission.logo_url,
             owner_id: submission.user_id,
+            slug: submission.slug,
           },
         ])
         .select("*")
@@ -623,7 +626,7 @@ export default function DashboardPage() {
 
                           <div className="mt-4 flex flex-wrap gap-2">
                             <Link
-                              href={`/companies/${company.id}`}
+                              href={`/companies/${company.slug || company.id}`}
                               className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
                             >
                               View
@@ -976,7 +979,7 @@ export default function DashboardPage() {
 
                                   <div className="mt-4 flex flex-wrap gap-2">
                                     <Link
-                                      href={`/companies/${inquiry.company_id}`}
+                                      href={`/companies/${companyMap.get(inquiry.company_id)?.slug || inquiry.company_id}`}
                                       className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                                     >
                                       Open company
@@ -1091,7 +1094,7 @@ export default function DashboardPage() {
 
                             <div className="mt-4 flex flex-wrap gap-2">
                               <Link
-                                href={`/companies/${company.id}`}
+                                href={`/companies/${company.slug || company.id}`}
                                 className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
                               >
                                 View
@@ -1183,7 +1186,7 @@ export default function DashboardPage() {
 
                                 <div className="mt-4 flex flex-wrap gap-2">
                                   <Link
-                                    href={`/companies/${inquiry.company_id}`}
+                                    href={`/companies/${companyMap.get(inquiry.company_id)?.slug || inquiry.company_id}`}
                                     className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                                   >
                                     Open company

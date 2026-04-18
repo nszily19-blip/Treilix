@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 type Company = {
   id: string;
+  slug?: string | null;
   logo_url?: string | null;
   company_name: string | null;
   country: string | null;
@@ -84,11 +85,22 @@ export default function CompanyDetailClient() {
         });
       }
 
-      const { data, error } = await supabase
-        .from("companies")
-        .select("*")
-        .eq("id", id)
-        .single();
+     let { data, error } = await supabase
+  .from("companies")
+  .select("*")
+  .eq("slug", id)
+  .maybeSingle();
+
+if (!data) {
+  const fallback = await supabase
+    .from("companies")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  data = fallback.data;
+  error = fallback.error;
+}
 
       if (!error && data) {
         setCompany(data as Company);
@@ -167,6 +179,7 @@ export default function CompanyDetailClient() {
   }
 
   const isOwner = user?.id === company.owner_id;
+  const companyPath = `/companies/${company.slug || company.id}`;
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
@@ -272,7 +285,7 @@ export default function CompanyDetailClient() {
             <div className="flex w-full flex-col gap-3 lg:w-auto lg:min-w-[240px]">
               {!isOwner && (
                 <Link
-                  href={`/companies/${company.id}/contact`}
+                  href={`${companyPath}/contact`}
                   className="rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
                 >
                   Contact company
@@ -293,8 +306,8 @@ export default function CompanyDetailClient() {
               {!isOwner && (
                 <Link
                   href={`/claim?companyId=${company.id}&name=${encodeURIComponent(
-                    company.company_name || ""
-                  )}`}
+  company.company_name || ""
+)}`}
                   className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
                   Claim this company
@@ -377,7 +390,7 @@ export default function CompanyDetailClient() {
               </div>
 
               <Link
-                href={`/companies/${company.id}/contact`}
+                href={`${companyPath}/contact`}
                 className="rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
               >
                 Send inquiry

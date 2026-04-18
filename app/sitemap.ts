@@ -7,33 +7,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   );
 
-  // lekérjük az összes céget
   const { data: companies } = await supabase
     .from("companies")
-    .select("id, created_at");
+    .select("id, slug, created_at");
 
   const companyUrls =
     companies?.map((company) => ({
-      url: `https://www.treilix.com/companies/${company.id}`,
+      url: `https://www.treilix.com/companies/${company.slug || company.id}`,
       lastModified: company.created_at
         ? new Date(company.created_at)
         : new Date(),
     })) ?? [];
 
   return [
-    // főoldal
     {
       url: "https://www.treilix.com",
       lastModified: new Date(),
     },
-
-    // companies lista
     {
       url: "https://www.treilix.com/companies",
       lastModified: new Date(),
     },
-
-    // static oldalak
     {
       url: "https://www.treilix.com/privacy",
       lastModified: new Date(),
@@ -42,8 +36,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: "https://www.treilix.com/imprint",
       lastModified: new Date(),
     },
-
-    // dinamikus cégek
     ...companyUrls,
   ];
 }

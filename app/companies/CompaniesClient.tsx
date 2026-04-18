@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 type Company = {
   id: string;
+  slug?: string | null;
   logo_url?: string | null;
   company_name: string | null;
   country: string | null;
@@ -93,8 +94,8 @@ function FilterChip({
         ? "bg-emerald-600 text-white"
         : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
       : active
-      ? "bg-slate-900 text-white"
-      : "bg-slate-100 text-slate-700 hover:bg-slate-200";
+        ? "bg-slate-900 text-white"
+        : "bg-slate-100 text-slate-700 hover:bg-slate-200";
 
   return (
     <button
@@ -143,7 +144,7 @@ export default function CompaniesClient() {
       const { data, error } = await supabase
         .from("companies")
         .select(
-          "id, company_name, country, city, website, logo_url, service_countries, transport_types, vehicle_types, created_at"
+          "id, slug, company_name, country, city, website, logo_url, service_countries, transport_types, vehicle_types, created_at"
         )
         .order("created_at", { ascending: false });
 
@@ -423,6 +424,7 @@ export default function CompaniesClient() {
               <div className="grid gap-4 xl:grid-cols-2">
                 {filteredCompanies.map((company) => {
                   const websiteUrl = normalizeWebsite(company.website);
+                  const companyPath = `/companies/${company.slug || company.id}`;
 
                   return (
                     <div
@@ -437,7 +439,7 @@ export default function CompaniesClient() {
 
                         <div className="min-w-0 flex-1">
                           <Link
-                            href={`/companies/${company.id}`}
+                            href={companyPath}
                             className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
                           >
                             {company.company_name}
@@ -463,14 +465,14 @@ export default function CompaniesClient() {
 
                           <div className="mt-4 flex flex-wrap gap-2">
                             <Link
-                              href={`/companies/${company.id}`}
+                              href={companyPath}
                               className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
                             >
                               View details
                             </Link>
 
                             <Link
-                              href={`/companies/${company.id}/contact`}
+                              href={`${companyPath}/contact`}
                               className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
                             >
                               Contact
