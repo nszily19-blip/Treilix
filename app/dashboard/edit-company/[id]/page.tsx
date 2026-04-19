@@ -6,40 +6,58 @@ import { createClient } from "@/lib/supabase/client";
 import MultiSelect from "@/app/components/MultiSelect";
 
 const SERVICE_COUNTRIES = [
-  "Germany",
+ "Germany",
   "Austria",
   "Hungary",
-  "Romania",
   "Poland",
   "Czech Republic",
   "Slovakia",
+  "Slovenia",
+  "Romania",
+  "Bulgaria",
   "Italy",
   "France",
+  "Spain",
   "Netherlands",
   "Belgium",
-  "Spain",
+  "Denmark",
+  "Sweden",
+  "Norway",
+  "Finland",
+  "Switzerland",
+  "United Kingdom"
 ];
 
 const TRANSPORT_TYPES = [
   "General cargo",
-  "Refrigerated",
-  "Express",
+  "Full truckload (FTL)",
+  "Less than truckload (LTL)",
+  "Express transport",
+  "Refrigerated transport",
+  "Hazardous goods (ADR)",
+  "Heavy / oversized transport",
   "Car transport",
-  "Container",
-  "Heavy transport",
-  "Groupage",
-  "Full truck load",
-  "Partial load",
+  "Container transport",
+  "Furniture moving",
+  "Milk transport",
+  "Food transport",
+  "Construction materials",
+  "Waste transport"
 ];
 
 const VEHICLE_TYPES = [
-  "Van",
+  "Van (3.5t)",
   "Box truck",
   "Curtain sider",
   "Refrigerated truck",
+  "Flatbed truck",
+  "Tanker",
   "Car transporter",
-  "Container truck",
-  "Flatbed",
+  "Container chassis",
+  "Low loader",
+  "Trailer / Semi-trailer",
+  "Mega trailer",
+  "Double trailer"
 ];
 
 type CompanyRecord = {
