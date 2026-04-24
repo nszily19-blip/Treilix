@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cache } from "react";
-import CompanyDetailClient from "./CompanyDetailClient";
+import CompanyDetailClientDE from "./CompanyDetailClientDE";
 import { createClient } from "@/lib/supabase/server";
 
 type CompanySeoData = {
@@ -11,26 +11,28 @@ type CompanySeoData = {
   website: string | null;
 };
 
-const getCompanySeoData = cache(async (id: string): Promise<CompanySeoData | null> => {
-  const supabase = await createClient();
+const getCompanySeoData = cache(
+  async (id: string): Promise<CompanySeoData | null> => {
+    const supabase = await createClient();
 
-  let { data } = await supabase
-    .from("companies")
-    .select("company_name, city, country, description, website")
-    .eq("slug", id)
-    .maybeSingle<CompanySeoData>();
-
-  if (!data) {
-    const fallback = await supabase
+    let { data } = await supabase
       .from("companies")
       .select("company_name, city, country, description, website")
-      .eq("id", id)
+      .eq("slug", id)
       .maybeSingle<CompanySeoData>();
-    data = fallback.data;
-  }
 
-  return data;
-});
+    if (!data) {
+      const fallback = await supabase
+        .from("companies")
+        .select("company_name, city, country, description, website")
+        .eq("id", id)
+        .maybeSingle<CompanySeoData>();
+      data = fallback.data;
+    }
+
+    return data;
+  }
+);
 
 export async function generateMetadata({
   params,
@@ -40,18 +42,17 @@ export async function generateMetadata({
   const { id } = await params;
   const data = await getCompanySeoData(id);
 
-  const companyName = data?.company_name || "Company";
-  const country = data?.country || "Europe";
+  const companyName = data?.company_name || "Unternehmen";
+  const country = data?.country || "Europa";
   const city = data?.city || "";
   const shortLocation = city ? `${city}, ${country}` : country;
 
-  const title = `${companyName} – Transport company in ${country} | Treilix`;
-
+  const title = `${companyName} – Transportunternehmen in ${country} | Treilix`;
   const description =
     data?.description?.trim() ||
-    `${companyName} is a transport and logistics company based in ${shortLocation}. View company details and contact options on Treilix.`;
+    `${companyName} ist ein Transport- und Logistikunternehmen mit Sitz in ${shortLocation}. Unternehmensdetails und Kontaktmöglichkeiten auf Treilix.`;
 
-  const canonicalUrl = `https://www.treilix.com/companies/${id}`;
+  const canonicalUrl = `https://www.treilix.com/de/companies/${id}`;
 
   return {
     title,
@@ -59,8 +60,8 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: canonicalUrl,
-        de: `https://www.treilix.com/de/companies/${id}`,
+        en: `https://www.treilix.com/companies/${id}`,
+        de: canonicalUrl,
       },
     },
     openGraph: {
@@ -78,7 +79,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CompanyDetailPage({
+export default async function DeCompanyDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -115,7 +116,7 @@ export default async function CompanyDetailPage({
           }}
         />
       )}
-      <CompanyDetailClient />
+      <CompanyDetailClientDE />
     </>
   );
 }

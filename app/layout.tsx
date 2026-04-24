@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   description: "Find transport companies in Europe",
   alternates: {
     canonical: "https://www.treilix.com",
+    languages: {
+      en: "https://www.treilix.com",
+      de: "https://www.treilix.com/de",
+    },
   },
   verification: {
     google: "fHwSvCJm6lbcnwE14naTRHsEYl0tRbrNj41eopZpJJQ",

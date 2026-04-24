@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   description: "Browse transport and logistics companies on Treilix.",
   alternates: {
     canonical: "https://www.treilix.com/companies",
+    languages: {
+      en: "https://www.treilix.com/companies",
+      de: "https://www.treilix.com/de/companies",
+    },
   },
 };
 

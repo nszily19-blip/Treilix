@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavbarAuth from "./NavbarAuth";
 import CookieBanner from "./CookieBanner";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function RootShell({
   children,
@@ -14,6 +15,21 @@ export default function RootShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isDE = pathname.startsWith("/de");
+
+  const navLinks = isDE
+    ? [
+        { href: "/de", label: "Start" },
+        { href: "/de/companies", label: "Unternehmen" },
+        { href: "/claim", label: "Beanspruchen" },
+        { href: "/add-company", label: "Eintragen" },
+      ]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/companies", label: "Companies" },
+        { href: "/claim", label: "Claim" },
+        { href: "/add-company", label: "Add Company" },
+      ];
 
   const [menuMounted, setMenuMounted] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -76,33 +92,19 @@ export default function RootShell({
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex">
-            <Link
-              href="/"
-              className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
-            >
-              Home
-            </Link>
-            <Link
-              href="/companies"
-              className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
-            >
-              Companies
-            </Link>
-            <Link
-              href="/claim"
-              className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
-            >
-              Claim
-            </Link>
-            <Link
-              href="/add-company"
-              className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
-            >
-              Add Company
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-slate-600 transition hover:text-slate-900"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-3 md:flex">
+            <LanguageSwitcher />
             <NavbarAuth />
           </div>
 
@@ -158,37 +160,22 @@ export default function RootShell({
 
             <div className="flex-1 overflow-y-auto px-4 py-5">
               <div className="flex flex-col gap-2">
-                <Link
-                  href="/"
-                  onClick={closeMenu}
-                  className="rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  Home
-                </Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMenu}
+                    className="rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
 
-                <Link
-                  href="/companies"
-                  onClick={closeMenu}
-                  className="rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  Companies
-                </Link>
+              <div className="my-5 h-px bg-slate-200" />
 
-                <Link
-                  href="/claim"
-                  onClick={closeMenu}
-                  className="rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  Claim
-                </Link>
-
-                <Link
-                  href="/add-company"
-                  onClick={closeMenu}
-                  className="rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                >
-                  Add Company
-                </Link>
+              <div className="flex justify-center">
+                <LanguageSwitcher />
               </div>
 
               <div className="my-5 h-px bg-slate-200" />
