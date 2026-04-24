@@ -5,8 +5,9 @@ import GoogleAnalytics from "./components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.treilix.com"),
-  title: "Treilix",
-  description: "Find transport companies in Europe",
+  title: "Treilix – Find Transport & Logistics Companies in Europe",
+  description:
+    "Search and connect with verified transport and logistics companies across Europe. Filter by country, transport type, and more.",
   alternates: {
     canonical: "https://www.treilix.com",
   },
