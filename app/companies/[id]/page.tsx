@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import CompanyDetailClient from "./CompanyDetailClient";
 import { createClient } from "@/lib/supabase/server";
 
@@ -7,20 +8,37 @@ type CompanySeoData = {
   city: string | null;
   country: string | null;
   description: string | null;
+  website: string | null;
 };
+
+const getCompanySeoData = cache(async (id: string): Promise<CompanySeoData | null> => {
+  const supabase = await createClient();
+
+  let { data } = await supabase
+    .from("companies")
+    .select("company_name, city, country, description, website")
+    .eq("slug", id)
+    .maybeSingle<CompanySeoData>();
+
+  if (!data) {
+    const fallback = await supabase
+      .from("companies")
+      .select("company_name, city, country, description, website")
+      .eq("id", id)
+      .maybeSingle<CompanySeoData>();
+    data = fallback.data;
+  }
+
+  return data;
+});
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
- const supabase = await createClient();
-
-  const { data } = await supabase
-    .from("companies")
-    .select("company_name, city, country, description")
-    .eq("id", params.id)
-    .single<CompanySeoData>();
+  const { id } = await params;
+  const data = await getCompanySeoData(id);
 
   const companyName = data?.company_name || "Company";
   const country = data?.country || "Europe";
@@ -33,7 +51,7 @@ export async function generateMetadata({
     data?.description?.trim() ||
     `${companyName} is a transport and logistics company based in ${shortLocation}. View company details and contact options on Treilix.`;
 
-  const canonicalUrl = `https://www.treilix.com/companies/${params.id}`;
+  const canonicalUrl = `https://www.treilix.com/companies/${id}`;
 
   return {
     title,
@@ -56,6 +74,44 @@ export async function generateMetadata({
   };
 }
 
-export default function CompanyDetailPage() {
-  return <CompanyDetailClient />;
+export default async function CompanyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const data = await getCompanySeoData(id);
+
+  const jsonLd = data
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: data.company_name,
+        description: data.description,
+        ...(data.city || data.country
+          ? {
+              address: {
+                "@type": "PostalAddress",
+                ...(data.city ? { addressLocality: data.city } : {}),
+                ...(data.country ? { addressCountry: data.country } : {}),
+              },
+            }
+          : {}),
+        ...(data.website ? { url: data.website } : {}),
+      }
+    : null;
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
+      <CompanyDetailClient />
+    </>
+  );
 }
