@@ -21,8 +21,8 @@ export default function RootShell({
     ? [
         { href: "/de", label: "Start" },
         { href: "/de/companies", label: "Unternehmen" },
-        { href: "/claim", label: "Beanspruchen" },
-        { href: "/add-company", label: "Eintragen" },
+        { href: "/de/claim", label: "Beanspruchen" },
+        { href: "/de/add-company", label: "Eintragen" },
       ]
     : [
         { href: "/", label: "Home" },
@@ -191,18 +191,19 @@ export default function RootShell({
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
           <p className="text-sm text-slate-600">
-            © {new Date().getFullYear()} Treilix. All rights reserved.
+            © {new Date().getFullYear()} Treilix.{" "}
+            {isDE ? "Alle Rechte vorbehalten." : "All rights reserved."}
           </p>
 
           <div className="mt-3 flex flex-wrap gap-4 text-sm text-slate-600">
-            <Link href="/terms" className="hover:text-slate-900">
-              Terms
+            <Link href={isDE ? "/de/terms" : "/terms"} className="hover:text-slate-900">
+              {isDE ? "Nutzungsbedingungen" : "Terms"}
             </Link>
-            <Link href="/privacy" className="hover:text-slate-900">
-              Privacy
+            <Link href={isDE ? "/de/privacy" : "/privacy"} className="hover:text-slate-900">
+              {isDE ? "Datenschutz" : "Privacy"}
             </Link>
-            <Link href="/imprint" className="hover:text-slate-900">
-              Imprint
+            <Link href={isDE ? "/de/imprint" : "/imprint"} className="hover:text-slate-900">
+              {isDE ? "Impressum" : "Imprint"}
             </Link>
           </div>
         </div>
