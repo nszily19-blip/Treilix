@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 
 export const dynamic = "force-dynamic";
 
+const COMPANIES_PER_PAGE = 20;
+
 type Company = {
   id: string;
   slug?: string | null;
@@ -108,6 +110,74 @@ function FilterChip({
   );
 }
 
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+
+  const pages: (number | "...")[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 3) pages.push("...");
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (currentPage < totalPages - 2) pages.push("...");
+    pages.push(totalPages);
+  }
+
+  return (
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Zurück
+      </button>
+
+      {pages.map((page, i) =>
+        page === "..." ? (
+          <span key={`ellipsis-${i}`} className="px-2 text-slate-400">
+            …
+          </span>
+        ) : (
+          <button
+            key={page}
+            type="button"
+            onClick={() => onPageChange(page)}
+            className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${
+              page === currentPage
+                ? "bg-blue-600 text-white"
+                : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            {page}
+          </button>
+        )
+      )}
+
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Weiter
+      </button>
+    </div>
+  );
+}
+
 export default function CompaniesClientDE() {
   const supabase = createClient();
 
@@ -120,6 +190,7 @@ export default function CompaniesClientDE() {
   const [transportFilters, setTransportFilters] = useState<string[]>([]);
   const [vehicleFilters, setVehicleFilters] = useState<string[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -159,6 +230,11 @@ export default function CompaniesClientDE() {
 
     loadCompanies();
   }, [supabase]);
+
+  // Reset to first page whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, countryFilter, serviceFilters, transportFilters, vehicleFilters]);
 
   const availableCountries = useMemo(
     () =>
@@ -233,12 +309,24 @@ export default function CompaniesClientDE() {
     vehicleFilters,
   ]);
 
+  const totalPages = Math.ceil(filteredCompanies.length / COMPANIES_PER_PAGE);
+  const startIndex = (currentPage - 1) * COMPANIES_PER_PAGE;
+  const paginatedCompanies = filteredCompanies.slice(
+    startIndex,
+    startIndex + COMPANIES_PER_PAGE
+  );
+
   const resetFilters = () => {
     setSearch("");
     setCountryFilter("all");
     setServiceFilters([]);
     setTransportFilters([]);
     setVehicleFilters([]);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const FiltersContent = (
@@ -385,7 +473,9 @@ export default function CompaniesClientDE() {
 
           <section>
             <div className="mb-5 text-sm text-slate-600">
-              Zeige {filteredCompanies.length} von {companies.length} Unternehmen
+              {filteredCompanies.length > 0
+                ? `Zeige ${startIndex + 1}–${Math.min(startIndex + COMPANIES_PER_PAGE, filteredCompanies.length)} von ${filteredCompanies.length} Unternehmen`
+                : `Zeige 0 von ${companies.length} Unternehmen`}
             </div>
 
             {loading ? (
@@ -416,69 +506,77 @@ export default function CompaniesClientDE() {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-4 xl:grid-cols-2">
-                {filteredCompanies.map((company) => {
-                  const websiteUrl = normalizeWebsite(company.website);
-                  const companyPath = `/de/companies/${company.slug || company.id}`;
+              <>
+                <div className="grid gap-4 xl:grid-cols-2">
+                  {paginatedCompanies.map((company) => {
+                    const websiteUrl = normalizeWebsite(company.website);
+                    const companyPath = `/de/companies/${company.slug || company.id}`;
 
-                  return (
-                    <div
-                      key={company.id}
-                      className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
-                    >
-                      <div className="flex items-start gap-4">
-                        <CompanyLogo
-                          logoUrl={company.logo_url}
-                          companyName={company.company_name}
-                        />
+                    return (
+                      <div
+                        key={company.id}
+                        className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                      >
+                        <div className="flex items-start gap-4">
+                          <CompanyLogo
+                            logoUrl={company.logo_url}
+                            companyName={company.company_name}
+                          />
 
-                        <div className="min-w-0 flex-1">
-                          <Link
-                            href={companyPath}
-                            className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
-                          >
-                            {company.company_name}
-                          </Link>
-
-                          <p className="mt-1 text-sm text-slate-500">
-                            {company.city || company.country || "Europa"}
-                            {company.country && company.city
-                              ? `, ${company.country}`
-                              : ""}
-                          </p>
-
-                          {websiteUrl && (
-                            <a
-                              href={websiteUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
-                            >
-                              {company.website}
-                            </a>
-                          )}
-
-                          <div className="mt-4 flex flex-wrap gap-2">
+                          <div className="min-w-0 flex-1">
                             <Link
                               href={companyPath}
-                              className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                              className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
                             >
-                              Details ansehen
+                              {company.company_name}
                             </Link>
 
-                            <Link
-                              href={`${companyPath}/contact`}
-                              className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                            >
-                              Kontakt
-                            </Link>
+                            <p className="mt-1 text-sm text-slate-500">
+                              {company.city || company.country || "Europa"}
+                              {company.country && company.city
+                                ? `, ${company.country}`
+                                : ""}
+                            </p>
+
+                            {websiteUrl && (
+                              <a
+                                href={websiteUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                              >
+                                {company.website}
+                              </a>
+                            )}
+
+                            <div className="mt-4 flex flex-wrap gap-2">
+                              <Link
+                                href={companyPath}
+                                className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                              >
+                                Details ansehen
+                              </Link>
+
+                              <Link
+                                href={`${companyPath}/contact`}
+                                className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                              >
+                                Kontakt
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </>
             )}
           </section>
         </div>
