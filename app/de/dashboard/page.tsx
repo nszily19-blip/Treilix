@@ -133,7 +133,7 @@ function StatCard({
   subtext?: string;
 }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <p className="text-sm font-medium text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-bold text-slate-900">{value}</p>
       {subtext && <p className="mt-2 text-sm text-slate-500">{subtext}</p>}
@@ -153,7 +153,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 md:text-2xl">{title}</h2>
@@ -563,7 +563,7 @@ export default function DashboardPageDE() {
                       placeholder="Unternehmen, Stadt, Land suchen..."
                       value={companySearch}
                       onChange={(e) => setCompanySearch(e.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
 
@@ -684,13 +684,13 @@ export default function DashboardPageDE() {
                           placeholder="Unternehmen, E-Mail, Name, Telefon suchen..."
                           value={claimSearch}
                           onChange={(e) => setClaimSearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={claimStatusFilter}
                           onChange={(e) => setClaimStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">Alle Status</option>
                           <option value="pending">Ausstehend</option>
@@ -778,13 +778,13 @@ export default function DashboardPageDE() {
                           placeholder="Unternehmen, Stadt, Land, E-Mail, Telefon suchen..."
                           value={submissionSearch}
                           onChange={(e) => setSubmissionSearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={submissionStatusFilter}
                           onChange={(e) => setSubmissionStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">Alle Status</option>
                           <option value="pending">Ausstehend</option>
@@ -883,13 +883,13 @@ export default function DashboardPageDE() {
                           placeholder="Unternehmen, Absender, E-Mail, Nachricht suchen..."
                           value={inquirySearch}
                           onChange={(e) => setInquirySearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={inquiryStatusFilter}
                           onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">Alle Status</option>
                           <option value="new">Neu</option>
@@ -1019,7 +1019,7 @@ export default function DashboardPageDE() {
                         placeholder="Unternehmen, Stadt, Land suchen..."
                         value={companySearch}
                         onChange={(e) => setCompanySearch(e.target.value)}
-                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
 
@@ -1103,13 +1103,13 @@ export default function DashboardPageDE() {
                         placeholder="Anfrage suchen..."
                         value={inquirySearch}
                         onChange={(e) => setInquirySearch(e.target.value)}
-                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
 
                       <select
                         value={inquiryStatusFilter}
                         onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       >
                         <option value="all">Alle Status</option>
                         <option value="new">Neu</option>

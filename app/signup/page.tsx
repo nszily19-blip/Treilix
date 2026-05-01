@@ -38,10 +38,10 @@ export default function SignupPage() {
 
     setLoading(true);
 
-const { data, error } = await supabase.auth.signUp({
-  email,
-  password,
-});
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
     setLoading(false);
 
@@ -58,33 +58,32 @@ const { data, error } = await supabase.auth.signUp({
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8">
-      <div className="mx-auto flex min-h-[70vh] max-w-md items-center justify-center">
-        <div className="w-full rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <h1 className="mb-2 text-center text-2xl font-bold text-slate-900">
-            Create account
-          </h1>
-
-          <p className="mb-6 text-center text-sm text-slate-600">
-            Sign up to manage your companies on Treilix.
-          </p>
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="mb-8 text-center">
+            <h1 className="text-2xl font-bold text-slate-900">Create account</h1>
+            <p className="mt-2 text-sm text-slate-500">
+              Sign up to manage your companies on Treilix
+            </p>
+          </div>
 
           <div className="space-y-4">
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Email
               </label>
               <input
                 type="email"
                 placeholder="you@example.com"
-                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Password
               </label>
 
@@ -92,7 +91,7 @@ const { data, error } = await supabase.auth.signUp({
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
-                  className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 pr-12 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -100,7 +99,7 @@ const { data, error } = await supabase.auth.signUp({
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-600 hover:text-slate-900"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-150 hover:text-slate-600"
                 >
                   {showPassword ? "🙈" : "👁"}
                 </button>
@@ -108,20 +107,20 @@ const { data, error } = await supabase.auth.signUp({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-800">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
                 Confirm password
               </label>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Repeat your password"
-                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
               />
             </div>
 
-            <div className="rounded-2xl bg-slate-50 p-4 text-xs text-slate-600">
-              <p className="font-medium text-slate-800">Password must:</p>
+            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs text-slate-600">
+              <p className="font-medium text-slate-700">Password must:</p>
               <ul className="mt-2 list-disc space-y-1 pl-5">
                 <li>be at least 8 characters</li>
                 <li>contain a capital letter</li>
@@ -132,9 +131,9 @@ const { data, error } = await supabase.auth.signUp({
             <button
               onClick={handleSignup}
               disabled={loading}
-              className="w-full rounded-2xl bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+              className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition-colors duration-200 hover:bg-blue-700 disabled:opacity-50"
             >
-              {loading ? "Creating account..." : "Sign up"}
+              {loading ? "Creating account..." : "Create account"}
             </button>
           </div>
 
@@ -144,16 +143,16 @@ const { data, error } = await supabase.auth.signUp({
                 message.toLowerCase().includes("error") ||
                 message.toLowerCase().includes("too many")
                   ? "text-red-600"
-                  : "text-green-600"
+                  : "text-emerald-600"
               }`}
             >
               {message}
             </p>
           )}
 
-          <p className="mt-5 text-center text-sm text-slate-600">
+          <p className="mt-6 text-center text-sm text-slate-500">
             Already have an account?{" "}
-            <Link href="/login" className="font-medium text-blue-600 hover:underline">
+            <Link href="/login" className="font-medium text-blue-600 transition-colors duration-150 hover:text-blue-700">
               Log in
             </Link>
           </p>

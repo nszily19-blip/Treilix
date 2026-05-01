@@ -46,11 +46,11 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-6 md:px-6">
-        <div className="mx-auto max-w-3xl rounded-2xl border bg-white p-6 shadow-sm">
-          <div className="h-8 w-40 animate-pulse rounded bg-slate-200" />
-          <div className="mt-4 h-5 w-64 animate-pulse rounded bg-slate-200" />
-          <div className="mt-3 h-5 w-52 animate-pulse rounded bg-slate-200" />
+      <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="h-8 w-40 animate-pulse rounded-lg bg-slate-200" />
+          <div className="mt-4 h-5 w-64 animate-pulse rounded-lg bg-slate-200" />
+          <div className="mt-3 h-5 w-52 animate-pulse rounded-lg bg-slate-200" />
         </div>
       </main>
     );
@@ -58,11 +58,9 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <main className="min-h-screen bg-slate-50 px-4 py-6 md:px-6">
-        <div className="mx-auto max-w-3xl rounded-2xl border bg-white p-8 text-center shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-900">
-            Not logged in
-          </h1>
+      <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <h1 className="text-2xl font-bold text-slate-900">Not logged in</h1>
           <p className="mt-2 text-sm text-slate-600">
             Please log in to view your profile.
           </p>
@@ -70,7 +68,7 @@ export default function ProfilePage() {
           <div className="mt-6">
             <Link
               href="/login"
-              className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
             >
               Go to login
             </Link>
@@ -81,32 +79,32 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-6 md:px-6">
-      <div className="mx-auto max-w-3xl space-y-6">
-        <section className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
-          <p className="mt-2 text-sm text-slate-600">
+    <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6">
+      <div className="mx-auto max-w-3xl space-y-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">My Profile</h1>
+          <p className="mt-1.5 text-slate-600">
             Manage your account and access your Treilix workspace.
           </p>
-        </section>
+        </div>
 
-        <section className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Account info</h2>
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900">Account info</h2>
 
-          <div className="mt-5 space-y-4 text-sm text-slate-700">
-            <div>
-              <p className="text-slate-500">Email</p>
-              <p className="mt-1 break-all">{user.email || "Not available"}</p>
+          <div className="mt-5 space-y-4 divide-y divide-slate-100">
+            <div className="pb-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Email</p>
+              <p className="mt-1 text-sm text-slate-900">{user.email || "Not available"}</p>
             </div>
 
-            <div>
-              <p className="text-slate-500">User ID</p>
-              <p className="mt-1 break-all">{user.id}</p>
+            <div className="py-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">User ID</p>
+              <p className="mt-1 break-all text-sm text-slate-900">{user.id}</p>
             </div>
 
-            <div>
-              <p className="text-slate-500">Account created</p>
-              <p className="mt-1">
+            <div className="pt-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Account created</p>
+              <p className="mt-1 text-sm text-slate-900">
                 {user.created_at
                   ? new Date(user.created_at).toLocaleString()
                   : "Not available"}
@@ -115,27 +113,27 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold text-slate-900">Quick actions</h2>
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900">Quick actions</h2>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link
               href="/dashboard"
-              className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
             >
               Go to dashboard
             </Link>
 
             <Link
               href="/forgot-password"
-              className="rounded-xl border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
             >
               Reset password
             </Link>
 
             <button
               onClick={handleLogout}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+              className="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-slate-800"
             >
               Log out
             </button>

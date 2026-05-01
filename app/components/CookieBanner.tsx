@@ -87,14 +87,14 @@ export default function CookieBanner() {
         <div className="flex flex-col gap-2 sm:flex-row">
           <button
             onClick={rejectCookies}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
           >
             {isDE ? "Ablehnen" : "Reject"}
           </button>
 
           <button
             onClick={acceptCookies}
-            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-blue-700"
           >
             {isDE ? "Akzeptieren" : "Accept"}
           </button>

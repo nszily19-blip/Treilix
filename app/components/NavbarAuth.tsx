@@ -85,14 +85,14 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
         <div className="flex flex-col gap-2">
           <Link
             href={isDE ? "/de/login" : "/login"}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
           >
             {isDE ? "Anmelden" : "Login"}
           </Link>
 
           <Link
             href={isDE ? "/de/signup" : "/signup"}
-            className="rounded-2xl bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-700"
           >
             {isDE ? "Registrieren" : "Sign up"}
           </Link>
@@ -104,9 +104,9 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
       <div className="flex flex-col gap-2">
         <Link
           href={isDE ? "/de/profile" : "/profile"}
-          className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
             {userInitial}
           </span>
           <span>{userLabel}</span>
@@ -114,14 +114,14 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
 
         <Link
           href={isDE ? "/de/dashboard" : "/dashboard"}
-          className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
         >
           Dashboard
         </Link>
 
         <button
           onClick={handleLogout}
-          className="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white hover:bg-slate-800"
+          className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-slate-800"
         >
           {isDE ? "Abmelden" : "Logout"}
         </button>
@@ -134,14 +134,14 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
       <div className="flex items-center gap-2">
         <Link
           href={isDE ? "/de/login" : "/login"}
-          className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
         >
           {isDE ? "Anmelden" : "Login"}
         </Link>
 
         <Link
           href={isDE ? "/de/signup" : "/signup"}
-          className="rounded-2xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-700"
         >
           {isDE ? "Registrieren" : "Sign up"}
         </Link>
@@ -153,9 +153,9 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
     <div className="flex items-center gap-2">
       <Link
         href={isDE ? "/de/profile" : "/profile"}
-        className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
       >
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
           {userInitial}
         </span>
         <span className="hidden xl:inline">{userLabel}</span>
@@ -163,14 +163,14 @@ export default function NavbarAuth({ mobile = false }: NavbarAuthProps) {
 
       <Link
         href={isDE ? "/de/dashboard" : "/dashboard"}
-        className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
       >
         Dashboard
       </Link>
 
       <button
         onClick={handleLogout}
-        className="rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+        className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-slate-800"
       >
         {isDE ? "Abmelden" : "Logout"}
       </button>

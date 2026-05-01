@@ -161,7 +161,7 @@ export default function CompanyDetailClientDE() {
           <div className="mt-6">
             <Link
               href="/de/companies"
-              className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
             >
               Zurück zur Übersicht
             </Link>
@@ -180,7 +180,7 @@ export default function CompanyDetailClientDE() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/de/companies"
-            className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
           >
             ← Zurück zur Übersicht
           </Link>
@@ -188,14 +188,14 @@ export default function CompanyDetailClientDE() {
           {isOwner && (
             <Link
               href={`/dashboard/edit-company/${company.id}`}
-              className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
             >
               Unternehmen bearbeiten
             </Link>
           )}
         </div>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               <div className="flex items-start gap-4">
@@ -281,7 +281,7 @@ export default function CompanyDetailClientDE() {
               {!isOwner && (
                 <Link
                   href={`${companyPath}/contact`}
-                  className="rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
+                  className="rounded-xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
                 >
                   Unternehmen kontaktieren
                 </Link>
@@ -292,7 +292,7 @@ export default function CompanyDetailClientDE() {
                   href={websiteUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                 >
                   Website besuchen
                 </a>
@@ -303,7 +303,7 @@ export default function CompanyDetailClientDE() {
                   href={`/claim?companyId=${company.id}&name=${encodeURIComponent(
                     company.company_name || ""
                   )}`}
-                  className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                 >
                   Profil beanspruchen
                 </Link>
@@ -313,7 +313,7 @@ export default function CompanyDetailClientDE() {
         </section>
 
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-bold text-slate-900">Über das Unternehmen</h2>
 
             <p className="mt-5 whitespace-pre-line text-sm leading-7 text-slate-600 md:text-base">
@@ -321,7 +321,7 @@ export default function CompanyDetailClientDE() {
             </p>
           </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-bold text-slate-900">Unternehmensdetails</h2>
 
             <div className="mt-6 space-y-5">
@@ -373,7 +373,7 @@ export default function CompanyDetailClientDE() {
         </div>
 
         {!isOwner && (
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900">
@@ -386,7 +386,7 @@ export default function CompanyDetailClientDE() {
 
               <Link
                 href={`${companyPath}/contact`}
-                className="rounded-2xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700"
+                className="rounded-xl bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
               >
                 Anfrage senden
               </Link>

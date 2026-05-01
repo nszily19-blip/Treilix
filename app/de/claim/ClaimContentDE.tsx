@@ -146,7 +146,7 @@ export default function ClaimContentDE() {
           </Link>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <h1 className="text-3xl font-bold text-slate-900">
             Ihr Unternehmen beanspruchen
           </h1>
@@ -178,7 +178,7 @@ export default function ClaimContentDE() {
                 placeholder="Unternehmensname, Stadt, Land..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
@@ -268,7 +268,7 @@ export default function ClaimContentDE() {
                 placeholder="Warum sollte dieses Unternehmensprofil Ihnen gehören?"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
@@ -281,7 +281,7 @@ export default function ClaimContentDE() {
                 placeholder="Unternehmens-E-Mail, Website-Zugang, öffentliche Daten, Ihre Position..."
                 value={proof}
                 onChange={(e) => setProof(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
@@ -289,7 +289,7 @@ export default function ClaimContentDE() {
               type="button"
               onClick={handleClaim}
               disabled={submitting || !selectedCompanyId}
-              className="w-full rounded-2xl bg-blue-600 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Wird gesendet..." : "Anfrage senden"}
             </button>

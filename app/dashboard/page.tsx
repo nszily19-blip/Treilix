@@ -135,10 +135,10 @@ function StatCard({
   subtext?: string;
 }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-sm font-medium text-slate-500">{label}</p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{label}</p>
       <p className="mt-2 text-3xl font-bold text-slate-900">{value}</p>
-      {subtext && <p className="mt-2 text-sm text-slate-500">{subtext}</p>}
+      {subtext && <p className="mt-1.5 text-xs text-slate-500">{subtext}</p>}
     </div>
   );
 }
@@ -155,7 +155,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900 md:text-2xl">{title}</h2>
@@ -524,18 +524,18 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 md:px-6 md:py-8">
-      <div className="mx-auto max-w-7xl space-y-6 md:space-y-8">
+      <div className="mx-auto max-w-7xl space-y-5 md:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Dashboard
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-1.5 text-sm text-slate-600">
             {isAdmin ? "Admin overview" : "Manage your companies and inquiries"}
           </p>
         </div>
 
         {loading && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 text-slate-600 shadow-sm">
             Loading...
           </div>
         )}
@@ -569,7 +569,7 @@ export default function DashboardPage() {
                   right={
                     <Link
                       href="/add-company"
-                      className="rounded-2xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
+                      className="rounded-xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
                     >
                       Add company
                     </Link>
@@ -581,7 +581,7 @@ export default function DashboardPage() {
                       placeholder="Search company, city, country..."
                       value={companySearch}
                       onChange={(e) => setCompanySearch(e.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
 
@@ -594,7 +594,7 @@ export default function DashboardPage() {
                       {filteredCompanies.map((company) => (
                         <div
                           key={company.id}
-                          className="rounded-2xl border border-slate-200 bg-white p-4"
+                          className="rounded-xl border border-slate-200 bg-white p-4"
                         >
                           <div className="flex items-start gap-3">
                             <CompanyLogo
@@ -627,14 +627,14 @@ export default function DashboardPage() {
                           <div className="mt-4 flex flex-wrap gap-2">
                             <Link
                               href={`/companies/${company.slug || company.id}`}
-                              className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                              className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-blue-700"
                             >
                               View
                             </Link>
 
                             <Link
                               href={`/dashboard/edit-company/${company.id}`}
-                              className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                              className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                             >
                               Edit
                             </Link>
@@ -642,7 +642,7 @@ export default function DashboardPage() {
                             <button
                               onClick={() => handleDeleteCompany(company.id)}
                               disabled={actionLoading === `delete-company-${company.id}`}
-                              className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                              className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                             >
                               {actionLoading === `delete-company-${company.id}`
                                 ? "Deleting..."
@@ -662,7 +662,7 @@ export default function DashboardPage() {
                   <div className="mb-5 flex flex-wrap gap-2">
                     <button
                       onClick={() => setAdminTab("claims")}
-                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
+                      className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-150 ${
                         adminTab === "claims"
                           ? "bg-blue-600 text-white"
                           : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -673,7 +673,7 @@ export default function DashboardPage() {
 
                     <button
                       onClick={() => setAdminTab("submissions")}
-                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
+                      className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-150 ${
                         adminTab === "submissions"
                           ? "bg-blue-600 text-white"
                           : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -684,7 +684,7 @@ export default function DashboardPage() {
 
                     <button
                       onClick={() => setAdminTab("inquiries")}
-                      className={`rounded-2xl px-4 py-2 text-sm font-medium ${
+                      className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-150 ${
                         adminTab === "inquiries"
                           ? "bg-blue-600 text-white"
                           : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -702,13 +702,13 @@ export default function DashboardPage() {
                           placeholder="Search company, email, name, phone..."
                           value={claimSearch}
                           onChange={(e) => setClaimSearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={claimStatusFilter}
                           onChange={(e) => setClaimStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="pending">Pending</option>
@@ -726,7 +726,7 @@ export default function DashboardPage() {
                           {filteredClaims.map((claim) => (
                             <div
                               key={claim.id}
-                              className="rounded-2xl border border-slate-200 p-4"
+                              className="rounded-xl border border-slate-200 p-4"
                             >
                               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                                 <div>
@@ -763,7 +763,7 @@ export default function DashboardPage() {
                                   <button
                                     onClick={() => updateClaimStatus(claim, "approved")}
                                     disabled={actionLoading === `claim-${claim.id}-approved`}
-                                    className="rounded-xl bg-green-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                    className="rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-green-700 disabled:opacity-60"
                                   >
                                     {actionLoading === `claim-${claim.id}-approved`
                                       ? "Approving..."
@@ -773,7 +773,7 @@ export default function DashboardPage() {
                                   <button
                                     onClick={() => updateClaimStatus(claim, "rejected")}
                                     disabled={actionLoading === `claim-${claim.id}-rejected`}
-                                    className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                    className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                                   >
                                     {actionLoading === `claim-${claim.id}-rejected`
                                       ? "Rejecting..."
@@ -796,13 +796,13 @@ export default function DashboardPage() {
                           placeholder="Search company, city, country, email, phone..."
                           value={submissionSearch}
                           onChange={(e) => setSubmissionSearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={submissionStatusFilter}
                           onChange={(e) => setSubmissionStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="pending">Pending</option>
@@ -820,7 +820,7 @@ export default function DashboardPage() {
                           {filteredSubmissions.map((submission) => (
                             <div
                               key={submission.id}
-                              className="rounded-2xl border border-slate-200 p-4"
+                              className="rounded-xl border border-slate-200 p-4"
                             >
                               <div className="flex items-start gap-3">
                                 <CompanyLogo
@@ -871,7 +871,7 @@ export default function DashboardPage() {
                                           actionLoading ===
                                           `submission-${submission.id}-approved`
                                         }
-                                        className="rounded-xl bg-green-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                        className="rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-green-700 disabled:opacity-60"
                                       >
                                         {actionLoading ===
                                         `submission-${submission.id}-approved`
@@ -887,7 +887,7 @@ export default function DashboardPage() {
                                           actionLoading ===
                                           `submission-${submission.id}-rejected`
                                         }
-                                        className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                        className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                                       >
                                         {actionLoading ===
                                         `submission-${submission.id}-rejected`
@@ -913,13 +913,13 @@ export default function DashboardPage() {
                           placeholder="Search company, sender, email, message..."
                           value={inquirySearch}
                           onChange={(e) => setInquirySearch(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         />
 
                         <select
                           value={inquiryStatusFilter}
                           onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                          className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                          className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                         >
                           <option value="all">All statuses</option>
                           <option value="new">New</option>
@@ -937,7 +937,7 @@ export default function DashboardPage() {
                           {filteredInquiries.map((inquiry) => (
                             <div
                               key={inquiry.id}
-                              className="rounded-2xl border border-slate-200 p-4"
+                              className="rounded-xl border border-slate-200 p-4"
                             >
                               <div className="flex items-start gap-3">
                                 <CompanyLogo
@@ -980,7 +980,7 @@ export default function DashboardPage() {
                                   <div className="mt-4 flex flex-wrap gap-2">
                                     <Link
                                       href={`/companies/${companyMap.get(inquiry.company_id)?.slug || inquiry.company_id}`}
-                                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                      className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                                     >
                                       Open company
                                     </Link>
@@ -989,7 +989,7 @@ export default function DashboardPage() {
                                       <button
                                         onClick={() => updateInquiryStatus(inquiry, "read")}
                                         disabled={actionLoading === `inquiry-${inquiry.id}-read`}
-                                        className="rounded-xl bg-slate-800 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                        className="rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-slate-900 disabled:opacity-60"
                                       >
                                         {actionLoading === `inquiry-${inquiry.id}-read`
                                           ? "Saving..."
@@ -1001,7 +1001,7 @@ export default function DashboardPage() {
                                       <button
                                         onClick={() => updateInquiryStatus(inquiry, "closed")}
                                         disabled={actionLoading === `inquiry-${inquiry.id}-closed`}
-                                        className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                        className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                                       >
                                         {actionLoading === `inquiry-${inquiry.id}-closed`
                                           ? "Closing..."
@@ -1037,7 +1037,7 @@ export default function DashboardPage() {
                     right={
                       <Link
                         href="/add-company"
-                        className="rounded-2xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-blue-700"
+                        className="rounded-xl bg-blue-600 px-4 py-2 text-center text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
                       >
                         Add company
                       </Link>
@@ -1049,7 +1049,7 @@ export default function DashboardPage() {
                         placeholder="Search company, city, country..."
                         value={companySearch}
                         onChange={(e) => setCompanySearch(e.target.value)}
-                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
 
@@ -1062,7 +1062,7 @@ export default function DashboardPage() {
                         {filteredCompanies.map((company) => (
                           <div
                             key={company.id}
-                            className="rounded-2xl border border-slate-200 p-4"
+                            className="rounded-xl border border-slate-200 p-4"
                           >
                             <div className="flex items-start gap-3">
                               <CompanyLogo
@@ -1095,14 +1095,14 @@ export default function DashboardPage() {
                             <div className="mt-4 flex flex-wrap gap-2">
                               <Link
                                 href={`/companies/${company.slug || company.id}`}
-                                className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                                className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-blue-700"
                               >
                                 View
                               </Link>
 
                               <Link
                                 href={`/dashboard/edit-company/${company.id}`}
-                                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                               >
                                 Edit
                               </Link>
@@ -1110,7 +1110,7 @@ export default function DashboardPage() {
                               <button
                                 onClick={() => handleDeleteCompany(company.id)}
                                 disabled={actionLoading === `delete-company-${company.id}`}
-                                className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                               >
                                 {actionLoading === `delete-company-${company.id}`
                                   ? "Deleting..."
@@ -1133,13 +1133,13 @@ export default function DashboardPage() {
                         placeholder="Search inquiry..."
                         value={inquirySearch}
                         onChange={(e) => setInquirySearch(e.target.value)}
-                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       />
 
                       <select
                         value={inquiryStatusFilter}
                         onChange={(e) => setInquiryStatusFilter(e.target.value)}
-                        className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                       >
                         <option value="all">All statuses</option>
                         <option value="new">New</option>
@@ -1157,7 +1157,7 @@ export default function DashboardPage() {
                         {filteredInquiries.map((inquiry) => (
                           <div
                             key={inquiry.id}
-                            className="rounded-2xl border border-slate-200 p-4"
+                            className="rounded-xl border border-slate-200 p-4"
                           >
                             <div className="flex items-start gap-3">
                               <CompanyLogo
@@ -1187,7 +1187,7 @@ export default function DashboardPage() {
                                 <div className="mt-4 flex flex-wrap gap-2">
                                   <Link
                                     href={`/companies/${companyMap.get(inquiry.company_id)?.slug || inquiry.company_id}`}
-                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                    className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                                   >
                                     Open company
                                   </Link>
@@ -1196,7 +1196,7 @@ export default function DashboardPage() {
                                     <button
                                       onClick={() => updateInquiryStatus(inquiry, "read")}
                                       disabled={actionLoading === `inquiry-${inquiry.id}-read`}
-                                      className="rounded-xl bg-slate-800 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      className="rounded-lg bg-slate-800 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-slate-900 disabled:opacity-60"
                                     >
                                       {actionLoading === `inquiry-${inquiry.id}-read`
                                         ? "Saving..."
@@ -1208,7 +1208,7 @@ export default function DashboardPage() {
                                     <button
                                       onClick={() => updateInquiryStatus(inquiry, "closed")}
                                       disabled={actionLoading === `inquiry-${inquiry.id}-closed`}
-                                      className="rounded-xl bg-red-600 px-3 py-2 text-sm font-medium text-white disabled:opacity-60"
+                                      className="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-700 disabled:opacity-60"
                                     >
                                       {actionLoading === `inquiry-${inquiry.id}-closed`
                                         ? "Closing..."

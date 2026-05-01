@@ -90,83 +90,92 @@ export default function HomePageDE() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      <section className="px-4 py-10 md:px-6 md:py-16">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero */}
+      <section className="relative overflow-hidden px-4 py-12 md:px-6 md:py-20">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-blue-50/40" />
+        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-blue-100/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-16 left-0 h-64 w-64 rounded-full bg-slate-100/60 blur-3xl" />
+
+        <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
-            <div className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 shadow-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
               Europäisches Transport-Verzeichnis
             </div>
 
-            <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
+            <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
               Transportunternehmen in Europa finden
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              Treilix hilft Unternehmen dabei, Transport- und Logistikunternehmen zu entdecken, nach Servicegebiet und Transportart zu filtern und direkte Anfragen über eine übersichtliche Plattform zu senden.
+            <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
+              Treilix hilft Unternehmen dabei, Transport- und Logistikunternehmen zu entdecken,
+              nach Servicegebiet und Transportart zu filtern und direkte Anfragen über eine
+              übersichtliche Plattform zu senden.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/de/companies"
-                className="rounded-2xl bg-blue-600 px-6 py-3 text-center font-semibold text-white hover:bg-blue-700"
+                className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white shadow-sm shadow-blue-200 transition-all duration-200 hover:bg-blue-700 hover:shadow-blue-300"
               >
                 Unternehmen durchsuchen
               </Link>
 
               <Link
-                href="/add-company"
-                className="rounded-2xl border border-slate-300 bg-white px-6 py-3 text-center font-semibold text-slate-700 hover:bg-slate-50"
+                href="/de/add-company"
+                className="rounded-xl border border-slate-200 bg-white px-6 py-3 text-center font-semibold text-slate-700 transition-colors duration-200 hover:border-slate-300 hover:bg-slate-50"
               >
                 Unternehmen eintragen
               </Link>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <span className="rounded-full bg-white px-4 py-2 text-sm text-slate-600 shadow-sm border border-slate-200">
+            <div className="mt-8 flex flex-wrap gap-2">
+              <span className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
                 Unternehmensprofile beanspruchen
               </span>
-              <span className="rounded-full bg-white px-4 py-2 text-sm text-slate-600 shadow-sm border border-slate-200">
+              <span className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
                 Direkte Anfragen
               </span>
-              <span className="rounded-full bg-white px-4 py-2 text-sm text-slate-600 shadow-sm border border-slate-200">
+              <span className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-600 shadow-sm">
                 Bessere Auffindbarkeit
               </span>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl md:p-8">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 md:p-8">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-slate-900">
                 Transportunternehmen suchen
               </h2>
-              <p className="mt-2 text-sm text-slate-600">
-                Beginnen Sie mit einem Stichwort oder filtern Sie nach Servicegebiet, Transportart und Fahrzeugtyp.
+              <p className="mt-1.5 text-sm text-slate-500">
+                Nach Servicegebiet, Transportart und mehr filtern.
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <input
                 type="text"
                 placeholder="Stichwort, Unternehmen, Stadt..."
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
 
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-2">
                 <input
                   type="text"
                   placeholder="Unternehmensland"
                   value={companyCountry}
                   onChange={(e) => setCompanyCountry(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 />
 
                 <select
                   value={serviceCountry}
                   onChange={(e) => setServiceCountry(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">Serviceland</option>
                   {SERVICE_COUNTRIES.map((item) => (
@@ -175,11 +184,11 @@ export default function HomePageDE() {
                 </select>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-3 md:grid-cols-2">
                 <select
                   value={transportType}
                   onChange={(e) => setTransportType(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">Transportart</option>
                   {TRANSPORT_TYPES.map((item) => (
@@ -190,7 +199,7 @@ export default function HomePageDE() {
                 <select
                   value={vehicleType}
                   onChange={(e) => setVehicleType(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
                 >
                   <option value="">Fahrzeugtyp</option>
                   {VEHICLE_TYPES.map((item) => (
@@ -201,7 +210,7 @@ export default function HomePageDE() {
 
               <button
                 onClick={handleSearch}
-                className="w-full rounded-2xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
+                className="w-full rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
               >
                 Unternehmen suchen
               </button>
@@ -210,55 +219,60 @@ export default function HomePageDE() {
         </div>
       </section>
 
-      <section className="px-4 py-8 md:px-6 md:py-12">
+      {/* Feature cards */}
+      <section className="px-4 py-10 md:px-6 md:py-14">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="text-sm font-semibold text-slate-400">01</div>
-            <h3 className="mt-3 text-xl font-semibold text-slate-900">
-              Intelligenter suchen
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              Filtern Sie Transportunternehmen nach Unternehmensland, Servicegebiet, Transportart und Fahrzeugtyp.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="text-sm font-semibold text-slate-400">02</div>
-            <h3 className="mt-3 text-xl font-semibold text-slate-900">
-              Direkt Kontakt aufnehmen
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              Senden Sie Anfragen über Treilix und erreichen Sie Unternehmen schneller durch einen klaren Kontaktablauf.
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="text-sm font-semibold text-slate-400">03</div>
-            <h3 className="mt-3 text-xl font-semibold text-slate-900">
-              Eintrag verwalten
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              Unternehmenseigentümer können Profile beanspruchen, Geschäftsdaten aktualisieren und Informationen aktuell halten.
-            </p>
-          </div>
+          {[
+            {
+              num: "01",
+              title: "Intelligenter suchen",
+              desc: "Filtern Sie Transportunternehmen nach Unternehmensland, Servicegebiet, Transportart und Fahrzeugtyp.",
+            },
+            {
+              num: "02",
+              title: "Direkt Kontakt aufnehmen",
+              desc: "Senden Sie Anfragen über Treilix und erreichen Sie Unternehmen schneller durch einen klaren Kontaktablauf.",
+            },
+            {
+              num: "03",
+              title: "Eintrag verwalten",
+              desc: "Unternehmenseigentümer können Profile beanspruchen, Geschäftsdaten aktualisieren und Informationen aktuell halten.",
+            },
+          ].map((card) => (
+            <div
+              key={card.num}
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-blue-600">
+                {card.num}
+              </div>
+              <h3 className="mt-4 text-lg font-semibold text-slate-900">
+                {card.title}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                {card.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="px-4 py-8 md:px-6 md:py-12">
+      {/* Recently added companies */}
+      <section className="px-4 py-6 md:px-6 md:py-10">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">
                 Zuletzt hinzugefügte Unternehmen
               </h2>
-              <p className="mt-2 text-slate-600">
+              <p className="mt-1.5 text-slate-600">
                 Entdecken Sie die neuesten auf Treilix gelisteten Unternehmen.
               </p>
             </div>
 
             <Link
               href="/de/companies"
-              className="text-sm font-medium text-blue-600 hover:underline"
+              className="text-sm font-medium text-blue-600 transition-colors duration-150 hover:text-blue-700"
             >
               Alle Unternehmen →
             </Link>
@@ -267,16 +281,16 @@ export default function HomePageDE() {
           {loading ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200" />
-                  <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                  <div className="mt-4 h-4 w-full animate-pulse rounded bg-slate-200" />
-                  <div className="mt-2 h-4 w-5/6 animate-pulse rounded bg-slate-200" />
+                <div key={index} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <div className="h-5 w-2/3 animate-pulse rounded-lg bg-slate-200" />
+                  <div className="mt-3 h-4 w-1/2 animate-pulse rounded-lg bg-slate-200" />
+                  <div className="mt-4 h-4 w-full animate-pulse rounded-lg bg-slate-200" />
+                  <div className="mt-2 h-4 w-5/6 animate-pulse rounded-lg bg-slate-200" />
                 </div>
               ))}
             </div>
           ) : featuredCompanies.length === 0 ? (
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
               <h3 className="text-lg font-semibold text-slate-900">
                 Noch keine Unternehmen
               </h3>
@@ -289,10 +303,10 @@ export default function HomePageDE() {
               {featuredCompanies.map((company) => (
                 <div
                   key={company.id}
-                  className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                  className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <Link href={`/de/companies/${company.id}`} className="block">
-                    <h3 className="text-lg font-semibold text-slate-900">
+                    <h3 className="text-base font-semibold text-slate-900 transition-colors duration-150 group-hover:text-blue-600">
                       {company.company_name}
                     </h3>
 
@@ -309,14 +323,14 @@ export default function HomePageDE() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link
                       href={`/de/companies/${company.id}`}
-                      className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                      className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-blue-700"
                     >
                       Details ansehen
                     </Link>
 
                     <Link
                       href={`/de/companies/${company.id}/contact`}
-                      className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                      className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                     >
                       Kontakt
                     </Link>
@@ -328,36 +342,40 @@ export default function HomePageDE() {
         </div>
       </section>
 
-      <section className="px-4 py-8 md:px-6 md:py-14">
-        <div className="mx-auto max-w-7xl rounded-3xl bg-slate-900 px-6 py-10 text-white shadow-sm md:px-10">
-          <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
-            <div>
-              <h2 className="text-3xl font-bold">
-                Ihr Unternehmen bei Treilix eintragen
-              </h2>
-              <p className="mt-3 max-w-2xl text-slate-300">
-                Treten Sie dem Verzeichnis bei, beanspruchen Sie Ihr Profil und erhalten Sie direkte Anfragen über die Plattform.
-              </p>
-            </div>
+      {/* CTA */}
+      <section className="px-4 py-10 md:px-6 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-10 shadow-lg shadow-blue-900/20 md:px-10">
+            <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-white md:text-3xl">
+                  Ihr Unternehmen bei Treilix eintragen
+                </h2>
+                <p className="mt-3 max-w-xl text-blue-100">
+                  Treten Sie dem Verzeichnis bei, beanspruchen Sie Ihr Profil und erhalten Sie
+                  direkte Anfragen über die Plattform.
+                </p>
+              </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Link
-                href="/add-company"
-                className="rounded-2xl bg-white px-5 py-3 text-center font-semibold text-slate-900 hover:bg-slate-100"
-              >
-                Unternehmen eintragen
-              </Link>
+              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                <Link
+                  href="/de/add-company"
+                  className="rounded-xl bg-white px-5 py-3 text-center font-semibold text-blue-600 transition-colors duration-200 hover:bg-blue-50"
+                >
+                  Unternehmen eintragen
+                </Link>
 
-              <Link
-                href="/signup"
-                className="rounded-2xl border border-slate-700 px-5 py-3 text-center font-semibold text-white hover:bg-slate-800"
-              >
-                Konto erstellen
-              </Link>
+                <Link
+                  href="/de/signup"
+                  className="rounded-xl border border-blue-400/40 px-5 py-3 text-center font-semibold text-white transition-colors duration-200 hover:bg-blue-500/30"
+                >
+                  Konto erstellen
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

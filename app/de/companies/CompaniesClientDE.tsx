@@ -103,7 +103,7 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${styles}`}
+      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ${styles}`}
     >
       {label}
     </button>
@@ -340,7 +340,7 @@ export default function CompaniesClientDE() {
           placeholder="Unternehmen, Stadt, Land..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
         />
       </div>
 
@@ -351,7 +351,7 @@ export default function CompaniesClientDE() {
         <select
           value={countryFilter}
           onChange={(e) => setCountryFilter(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
         >
           <option value="all">Alle Länder</option>
           {availableCountries.map((country) => (
@@ -427,7 +427,7 @@ export default function CompaniesClientDE() {
       <button
         type="button"
         onClick={resetFilters}
-        className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
       >
         Filter zurücksetzen
       </button>
@@ -435,14 +435,14 @@ export default function CompaniesClientDE() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6 md:py-10">
+    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-6 md:py-10">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
               Unternehmen
             </h1>
-            <p className="mt-2 max-w-2xl text-slate-600">
+            <p className="mt-2 text-slate-600">
               Durchsuchen Sie Transport- und Logistikunternehmen auf Treilix.
             </p>
           </div>
@@ -450,29 +450,29 @@ export default function CompaniesClientDE() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen((prev) => !prev)}
-            className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50 md:hidden"
           >
             {mobileFiltersOpen ? "Filter ausblenden" : "Filter anzeigen"}
           </button>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="hidden lg:block">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               {FiltersContent}
             </div>
           </aside>
 
           {mobileFiltersOpen && (
             <div className="lg:hidden">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 {FiltersContent}
               </div>
             </div>
           )}
 
           <section>
-            <div className="mb-5 text-sm text-slate-600">
+            <div className="mb-5 text-sm text-slate-500">
               {filteredCompanies.length > 0
                 ? `Zeige ${startIndex + 1}–${Math.min(startIndex + COMPANIES_PER_PAGE, filteredCompanies.length)} von ${filteredCompanies.length} Unternehmen`
                 : `Zeige 0 von ${companies.length} Unternehmen`}
@@ -483,21 +483,21 @@ export default function CompaniesClientDE() {
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
-                    className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+                    className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="h-16 w-16 animate-pulse rounded-2xl bg-slate-200" />
+                      <div className="h-14 w-14 animate-pulse rounded-xl bg-slate-200" />
                       <div className="min-w-0 flex-1">
-                        <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200" />
-                        <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                        <div className="mt-3 h-4 w-1/3 animate-pulse rounded bg-slate-200" />
+                        <div className="h-5 w-2/3 animate-pulse rounded-lg bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/2 animate-pulse rounded-lg bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/3 animate-pulse rounded-lg bg-slate-200" />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : filteredCompanies.length === 0 ? (
-              <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-900">
                   Keine Unternehmen gefunden
                 </h2>
@@ -515,7 +515,7 @@ export default function CompaniesClientDE() {
                     return (
                       <div
                         key={company.id}
-                        className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                        className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <div className="flex items-start gap-4">
                           <CompanyLogo
@@ -526,7 +526,7 @@ export default function CompaniesClientDE() {
                           <div className="min-w-0 flex-1">
                             <Link
                               href={companyPath}
-                              className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
+                              className="block truncate text-lg font-semibold text-slate-900 transition-colors duration-150 hover:text-blue-600"
                             >
                               {company.company_name}
                             </Link>
@@ -543,7 +543,7 @@ export default function CompaniesClientDE() {
                                 href={websiteUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                                className="mt-1.5 block truncate text-sm text-blue-600 transition-colors duration-150 hover:text-blue-700"
                               >
                                 {company.website}
                               </a>
@@ -552,14 +552,14 @@ export default function CompaniesClientDE() {
                             <div className="mt-4 flex flex-wrap gap-2">
                               <Link
                                 href={companyPath}
-                                className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-blue-700"
                               >
                                 Details ansehen
                               </Link>
 
                               <Link
                                 href={`${companyPath}/contact`}
-                                className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                               >
                                 Kontakt
                               </Link>
@@ -581,6 +581,6 @@ export default function CompaniesClientDE() {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

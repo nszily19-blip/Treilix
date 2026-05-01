@@ -63,13 +63,13 @@ function CompanyLogo({
       <img
         src={logoUrl}
         alt={companyName || "Company logo"}
-        className="h-16 w-16 rounded-2xl border border-slate-200 bg-white object-cover"
+        className="h-14 w-14 rounded-xl border border-slate-200 bg-white object-cover"
       />
     );
   }
 
   return (
-    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-lg font-semibold text-slate-500">
+    <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-lg font-semibold text-slate-500">
       {getInitials(companyName)}
     </div>
   );
@@ -103,7 +103,7 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${styles}`}
+      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ${styles}`}
     >
       {label}
     </button>
@@ -140,7 +140,7 @@ function Pagination({
         type="button"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
       >
         Previous
       </button>
@@ -155,10 +155,10 @@ function Pagination({
             key={page}
             type="button"
             onClick={() => onPageChange(page)}
-            className={`rounded-2xl px-4 py-2 text-sm font-medium transition ${
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-150 ${
               page === currentPage
                 ? "bg-blue-600 text-white"
-                : "border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+                : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
             }`}
           >
             {page}
@@ -170,7 +170,7 @@ function Pagination({
         type="button"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
       >
         Next
       </button>
@@ -232,7 +232,6 @@ export default function CompaniesClient() {
     loadCompanies();
   }, [supabase]);
 
-  // Reset to first page whenever filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, countryFilter, serviceFilters, transportFilters, vehicleFilters]);
@@ -345,7 +344,7 @@ export default function CompaniesClient() {
           placeholder="Company, city, country..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
         />
       </div>
 
@@ -356,7 +355,7 @@ export default function CompaniesClient() {
         <select
           value={countryFilter}
           onChange={(e) => setCountryFilter(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition-colors duration-150 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
         >
           <option value="all">All countries</option>
           {availableCountries.map((country) => (
@@ -432,7 +431,7 @@ export default function CompaniesClient() {
       <button
         type="button"
         onClick={resetFilters}
-        className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
       >
         Reset filters
       </button>
@@ -440,14 +439,14 @@ export default function CompaniesClient() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 md:px-6 md:py-10">
+    <div className="min-h-screen bg-slate-50 px-4 py-8 md:px-6 md:py-10">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 md:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
               Companies
             </h1>
-            <p className="mt-2 max-w-2xl text-slate-600">
+            <p className="mt-2 text-slate-600">
               Browse transport and logistics companies on Treilix.
             </p>
           </div>
@@ -455,29 +454,29 @@ export default function CompaniesClient() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen((prev) => !prev)}
-            className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 md:hidden"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50 md:hidden"
           >
             {mobileFiltersOpen ? "Hide filters" : "Show filters"}
           </button>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
+        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
           <aside className="hidden lg:block">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               {FiltersContent}
             </div>
           </aside>
 
           {mobileFiltersOpen && (
             <div className="lg:hidden">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 {FiltersContent}
               </div>
             </div>
           )}
 
           <section>
-            <div className="mb-5 text-sm text-slate-600">
+            <div className="mb-5 text-sm text-slate-500">
               {filteredCompanies.length > 0
                 ? `Showing ${startIndex + 1}–${Math.min(startIndex + COMPANIES_PER_PAGE, filteredCompanies.length)} of ${filteredCompanies.length} companies`
                 : `Showing 0 of ${companies.length} companies`}
@@ -488,21 +487,21 @@ export default function CompaniesClient() {
                 {Array.from({ length: 6 }).map((_, index) => (
                   <div
                     key={index}
-                    className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+                    className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="h-16 w-16 animate-pulse rounded-2xl bg-slate-200" />
+                      <div className="h-14 w-14 animate-pulse rounded-xl bg-slate-200" />
                       <div className="min-w-0 flex-1">
-                        <div className="h-5 w-2/3 animate-pulse rounded bg-slate-200" />
-                        <div className="mt-3 h-4 w-1/2 animate-pulse rounded bg-slate-200" />
-                        <div className="mt-3 h-4 w-1/3 animate-pulse rounded bg-slate-200" />
+                        <div className="h-5 w-2/3 animate-pulse rounded-lg bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/2 animate-pulse rounded-lg bg-slate-200" />
+                        <div className="mt-3 h-4 w-1/3 animate-pulse rounded-lg bg-slate-200" />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : filteredCompanies.length === 0 ? (
-              <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+              <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-900">
                   No companies found
                 </h2>
@@ -520,7 +519,7 @@ export default function CompaniesClient() {
                     return (
                       <div
                         key={company.id}
-                        className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                        className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                       >
                         <div className="flex items-start gap-4">
                           <CompanyLogo
@@ -531,7 +530,7 @@ export default function CompaniesClient() {
                           <div className="min-w-0 flex-1">
                             <Link
                               href={companyPath}
-                              className="block truncate text-xl font-semibold text-slate-900 hover:text-blue-700"
+                              className="block truncate text-lg font-semibold text-slate-900 transition-colors duration-150 hover:text-blue-600"
                             >
                               {company.company_name}
                             </Link>
@@ -548,7 +547,7 @@ export default function CompaniesClient() {
                                 href={websiteUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="mt-2 block truncate text-sm text-blue-600 hover:text-blue-700"
+                                className="mt-1.5 block truncate text-sm text-blue-600 transition-colors duration-150 hover:text-blue-700"
                               >
                                 {company.website}
                               </a>
@@ -557,14 +556,14 @@ export default function CompaniesClient() {
                             <div className="mt-4 flex flex-wrap gap-2">
                               <Link
                                 href={companyPath}
-                                className="rounded-2xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-blue-700"
                               >
                                 View details
                               </Link>
 
                               <Link
                                 href={`${companyPath}/contact`}
-                                className="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors duration-150 hover:bg-slate-50"
                               >
                                 Contact
                               </Link>
@@ -586,6 +585,6 @@ export default function CompaniesClient() {
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

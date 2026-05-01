@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import RootShell from "./components/RootShell";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.treilix.com"),
@@ -25,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-50 text-slate-900">
+    <html lang="en" className={inter.className}>
+      <body className="bg-slate-50 text-slate-900 antialiased">
         <GoogleAnalytics />
         <RootShell>{children}</RootShell>
       </body>
